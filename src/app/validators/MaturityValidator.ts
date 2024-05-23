@@ -7,5 +7,10 @@ export const maturityValidator: ValidatorFn = (control: AbstractControl): Valida
     const animal1 = formGroup.get('animalInput1')?.value as DnDMonster;
     const animal2 = formGroup.get('animalInput2')?.value as DnDMonster;
     console.log(formGroup)
-    return animal1.evolutionStage !== EvolutionStage.adult || animal2.evolutionStage  !== EvolutionStage.adult ? { evolutionStageMismatch: true } : null;
+    if (!animal1 || !animal2) {
+        return null;
+    }
+
+    // @ts-ignore
+    return EvolutionStage[animal1?.evolutionStage] !== EvolutionStage.adult || EvolutionStage[animal2?.evolutionStage]  !== EvolutionStage.adult ? { evolutionStageMismatch: true } : null;
   };

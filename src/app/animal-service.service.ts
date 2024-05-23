@@ -57,9 +57,16 @@ export class AnimalService {
         }
         const cycleTimeMilis = monster.species.cycleTime * 24 * 60 * 60 * 10; // Corrected to milliseconds
   
+        if (monster.lastEvolutionTimestamp > Date.now()) {
+          // If the last evolution time is in the future, reset it to now
+          monster.lastEvolutionTimestamp = Date.now();
+        }
         let lastEvolutionTime = monster.lastEvolutionTimestamp instanceof Date ? monster.lastEvolutionTimestamp.getTime() : new Date(monster.lastEvolutionTimestamp).getTime();
         let timeSinceLastEvolution = Date.now() - lastEvolutionTime;
         let progressPercentage = Math.min((timeSinceLastEvolution / cycleTimeMilis) * 100, 100);
+
+
+        
   
         // Keep evolving the monster as long as it's eligible
         while (timeSinceLastEvolution >= cycleTimeMilis || progressPercentage >= 1) {
@@ -74,10 +81,15 @@ export class AnimalService {
   
           // Calculate the time and progress for the next potential evolution
           lastEvolutionTime = monster.lastEvolutionTimestamp.getTime();
-          timeSinceLastEvolution = Date.now() - lastEvolutionTime;
-          progressPercentage = Math.min((timeSinceLastEvolution / cycleTimeMilis) * 100, 100);
+          if (Date.now() >= lastEvolutionTime) {
+            timeSinceLastEvolution = Date.now() - lastEvolutionTime;
+            progressPercentage = Math.min((timeSinceLastEvolution / cycleTimeMilis) * 100, 100);
+          } else {
+            timeSinceLastEvolution = 0;
+            progressPercentage = 0;
+          }
         }
-  
+      
         // If the monster is not yet ready for the next evolution, update the progress
         monster.progressTowardsNextEvolution = progressPercentage;
   
@@ -88,7 +100,6 @@ export class AnimalService {
       updatedAnimals.forEach(monster => this.updateAnimal(monster));
     }, 3000); // Execute every 3000ms (3 seconds)
   }
-
 
 
 

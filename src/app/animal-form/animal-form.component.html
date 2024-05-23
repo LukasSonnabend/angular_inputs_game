@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <button class="button button-secondary" (click)="addRandomAnimal($event)">Add monster</button>
+  <!-- <button class="button button-secondary" (click)="addRandomAnimal($event)">Add monster</button> -->
     <div *ngFor="let error of formErrors | keyvalue" style="display: flex">
       <div *ngIf="form.errors?.[error.key]" class="error-message">
         <h2>{{ error.value }}</h2>

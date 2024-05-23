@@ -131,7 +131,7 @@ export class BreedingServiceService {
         errorMessage: '',
         timeToHatch: monster1.gestationPeriod.value + monster2.gestationPeriod.value * 24, 
         breedingStartDateTime: new Date(),
-        countDown: Infinity
+        countDown: -1
       };
       this.breedingPodsSubject.next([...currentPods, newPod]);
       this.savePodsToLocalStorage();

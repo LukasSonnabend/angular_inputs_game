@@ -4,7 +4,6 @@ import { ValidatorFn, FormGroup, ValidationErrors, AbstractControl } from '@angu
 export function speciesMismatchValidator(formGroup: FormGroup): ValidationErrors | null {
   const animalInput1 = formGroup.get('animalInput1')?.value;
   const animalInput2 = formGroup.get('animalInput2')?.value;
-  console.log(formGroup);
   if (animalInput1 && animalInput2 && animalInput1.species.species !== animalInput2.species.species) {
     return { speciesMismatch: true };
   }

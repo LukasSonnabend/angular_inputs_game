@@ -45,19 +45,10 @@ reroll(_t7: { name: string; control: import("@angular/forms").AbstractControl<an
 
   constructor(protected monsterSelectionService: MonsterSelectionService, private fb: FormBuilder, private formService: FormService, private IDBService: IndexedDBService, private animalService: AnimalService, private breedingService: BreedingServiceService) {}
 
-
-  initForm() {
-    this.form = this.fb.group({
-      animalInput1: new FormControl(),
-      animalInput2: new FormControl()
-    }, { validators: [genderMismatchValidator, speciesMismatchValidator, maturityValidator] });
-  }
-
-
   ngOnInit() {
     this.monsterSelectionService.getSelectedMonstersObservable().subscribe(selectedMonsters => {
       // Initialize an empty form group
-      this.form = this.fb.group({}, { validators: [genderMismatchValidator, speciesMismatchValidator] });
+      this.form = this.fb.group({}, { validators: [genderMismatchValidator, speciesMismatchValidator, maturityValidator] });
   
       // Check if the first monster is selected and add it to the form if it's not null
       if (selectedMonsters.length > 0 && selectedMonsters[0] !== null) {

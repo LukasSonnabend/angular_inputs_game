@@ -57,7 +57,7 @@ function generateNewMonster(): DnDMonster {
 }
 
 
-export function generateNewMonsterW(speciesInc: string, evolutionStageInc: string): DnDMonster {
+export function generateNewMonsterW(speciesInc: string, evolutionStageInc: string, gender: string): DnDMonster {
   const species = MonsterData.find(i => i.species === speciesInc)
   if (!species)
     throw new Error('Invalid Species');
@@ -86,7 +86,7 @@ export function generateNewMonsterW(speciesInc: string, evolutionStageInc: strin
         // @ts-ignore
       yieldBonus: selectAttributeValue(YieldBonusAttributeValues),
                 // @ts-ignore
-      gender: Gender[Math.floor(Math.random() * 2) as 0 | 1]
+      gender: gender,
   };
   // @ts-ignore
   return data

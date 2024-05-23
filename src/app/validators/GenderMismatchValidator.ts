@@ -6,6 +6,5 @@ export const genderMismatchValidator: ValidatorFn = (control: AbstractControl): 
     const formGroup = control as FormGroup;
     const animal1 = formGroup.get('animalInput1')?.value;
     const animal2 = formGroup.get('animalInput2')?.value;
-    console.log(formGroup)
     return animal1 && animal2 && animal1.gender === animal2.gender ? { genderMismatch: true } : null;
   };
