@@ -56,4 +56,41 @@ function generateNewMonster(): DnDMonster {
     return data
 }
 
+
+export function generateNewMonsterW(speciesInc: string, evolutionStageInc: string): DnDMonster {
+  const species = MonsterData.find(i => i.species === speciesInc)
+  if (!species)
+    throw new Error('Invalid Species');
+
+  const birthTimestamp = new Date();
+  const data =  {
+      uuid: uuidv4(),
+      name: randSuperheroName(),
+      // @ts-ignore
+      evolutionStage: evolutionStageInc,//EvolutionStage[Math.floor(Math.random() * 3) as 0 | 1 | 2],
+      lastEvolutionTimestamp: birthTimestamp, 
+      birthTimestamp,
+      enclosureCost: species.enclosureCost,
+      species: species,
+      baseSalePrice: species.baseSalePrice,
+      // @ts-ignore
+      strength: selectAttributeValue(StrengthAttributeValues),
+      progressTowardsNextEvolution: 0,
+        // @ts-ignore
+      remarkability: selectAttributeValue(RemarkabilityAttributeValues),
+        // @ts-ignore
+      mutationChance: selectAttributeValue(MutationChanceAttributeValues),
+        // @ts-ignore
+      gestationPeriod: selectAttributeValue(TrageZeitAttributeValue),
+      cycleTime: species.cycleTime,
+        // @ts-ignore
+      yieldBonus: selectAttributeValue(YieldBonusAttributeValues),
+                // @ts-ignore
+      gender: Gender[Math.floor(Math.random() * 2) as 0 | 1]
+  };
+  // @ts-ignore
+  return data
+}
+
+
 export default generateNewMonster;
