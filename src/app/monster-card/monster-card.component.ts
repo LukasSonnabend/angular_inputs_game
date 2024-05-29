@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { MonsterSelectionService } from '../service/monster-selection-service/monster-selection-service.service';
 import { IndexedDBService } from '../indexed-db.service';
 import { AnimalService } from '../animal-service.service';
 import { CommonModule } from '@angular/common';
 import { EvolutionStepperComponent } from "../evolution-stepper/evolution-stepper.component";
-import { Animal, Gender } from '../../types';
+import { Animal, DnDMonster, Gender } from '../../types';
+import { MS_TO_DAYS } from '../../util';
 
 @Component({
     selector: 'app-monster-card',
@@ -18,10 +19,24 @@ export class MonsterCardComponent {
   @Input() monster: Animal | undefined = undefined;
   public showSpeciesInfo: boolean = false;
 
+  showDataView = false;
+  MS_TO_DAYS = MS_TO_DAYS
+  @HostListener('document:keydown.alt.enter', ['$event'])
+  toggleDataView(event: KeyboardEvent) {
+      event.preventDefault();
+      this.showDataView = !this.showDataView;
+  }
+
   constructor(protected selectionService: MonsterSelectionService, private IDBService: IndexedDBService, protected AnimalService: AnimalService) {}
 
-
-  openSpeciesInfo(event: TouchEvent): void {
+  calculateTotalTime(timeToHatch: number, breedingStartDateTime?: DnDMonster): string {
+    const totalTime = breedingStartDateTime?.lastEvolutionTimestamp ? new Date(breedingStartDateTime?.lastEvolutionTimestamp) : new Date();
+    if (totalTime) {
+      totalTime.setTime(totalTime.getTime() + timeToHatch);
+    }
+    return totalTime?.toLocaleString() || "";
+  }
+  openSpeciesInfo(event: Event): void {
     event.stopImmediatePropagation();
     event.stopPropagation();
     event.preventDefault();

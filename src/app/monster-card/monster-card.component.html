@@ -2,7 +2,7 @@
     <div class="flex-grow">
     <div>
         <img [src]="monster?.species?.image_url" alt="{{monster?.name}}" class="monster-image">
-        <h2>{{monster?.name}}</h2> <h2>{{monster?.species?.name}}</h2> <h2>{{monster?.gender}}</h2>
+        <h2>{{monster?.name}}</h2> <h2>{{monster?.species?.name}}</h2> <h2>{{monster?.gender}}</h2> <h2>{{monster?.tier}}</h2>
     </div>
     <ng-container *ngIf="monster">
         <app-evolution-stepper [monster]="monster"/>
@@ -19,37 +19,41 @@
         </div>
         <div class="attribute-item">
             <div><span class="attribute-icon cycle-time"></span><span class="attribute">Cycle Time:</span></div>
-            <div>{{monster?.species?.cycleTime}} days</div>
+            <div>{{monster?.nerfed?.species?.cycleTime}} days</div>
         </div>
         <!-- <div class="attribute-item">
             <div><span class="attribute-icon description"></span><span class="attribute">Description:</span></div>
             <div>{{monster?.species?.description}}</div>
         </div> -->
         <div class="attribute-item">
+            <div><span class="attribute-icon gestation-period"></span><span class="attribute">Gestation Period Bonus:</span></div>
+            <div>{{monster?.nerfed?.gestationPeriod?.enumValue}}</div>
+        </div>
+        <div class="attribute-item">
             <div><span class="attribute-icon strength"></span><span class="attribute">Strength Bonus:</span></div>
             <!-- <div>{{monster?.strength?.enumValue}}</div> -->
-            <div>{{monster?.strength?.enumValue}}</div>
+            <div>{{monster?.nerfed?.strength?.enumValue}}</div>
+            <div>Würfel: {{monster?.nerfed?.strength?.value}}</div>
         </div>
         <div class="attribute-item">
             <div><span class="attribute-icon remarkability"></span><span class="attribute">Remarkability Bonus:</span></div>
-            <div>{{monster?.remarkability?.enumValue}}</div>
+            <div>{{monster?.nerfed?.remarkability?.enumValue}}</div>
+            <div>Würfel: {{monster?.nerfed?.remarkability?.value}}</div>
         </div>
         <div class="attribute-item">
             <div><span class="attribute-icon mutation-chance"></span><span class="attribute">Mutation Chance Bonus:</span></div>
-            <div>{{monster?.mutationChance?.enumValue}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon gestation-period"></span><span class="attribute">Gestation Period Bonus:</span></div>
-            <div>{{monster?.gestationPeriod?.enumValue}}</div>
+            <div>{{monster?.nerfed?.mutationChance?.enumValue}}</div>
+            <div>Würfel: {{monster?.nerfed?.mutationChance?.value}}</div>
         </div>
         <div class="attribute-item">
             <div><span class="attribute-icon yield-bonus"></span><span class="attribute">Yield Bonus:</span></div>
             <div>{{monster?.yieldBonus?.enumValue}}</div>
+            <div>Würfel: {{monster?.nerfed?.yieldBonus?.value}}</div>
         </div>
         <!-- <div class="attribute-item">
             <div><span class="attribute-icon birth-timestamp"></span><span class="attribute">Birth Timestamp:</span></div>
         </div> -->
-        <button (click)="openSpeciesInfo" class="toggle-species-info z-50">Species Info</button>
+        <button (click)="openSpeciesInfo($event)" class="toggle-species-info z-100 button button-secondary">Species Info</button>
         <!-- Collapsible Section for Species Info -->
         <div *ngIf="showSpeciesInfo" class="attributes-grid">
             <div class="attribute-item">
@@ -70,6 +74,10 @@
             </div>
         </div>
         <p>{{monster?.progressTowardsNextEvolution}}</p>
+          <p *ngIf="monster">Done at {{ calculateTotalTime(monster.species.cycleTime! * MS_TO_DAYS, monster) }}</p>
+    </div>
+    <div *ngIf="showDataView" class="data-view">
+        <pre>{{monster | json}}</pre>
     </div>
 </div>
 <div>

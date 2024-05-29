@@ -95,6 +95,22 @@ export enum EvolutionStage {
   adult = 2
 }
 
+
+export enum Tier {
+  S = 'S',
+  APlus = 'A+',
+  A = 'A',
+  AMinus = 'A-',
+  BPlus = 'B+',
+  B = 'B',
+  BMinus = 'B-',
+  CPlus = 'C+',
+  C = 'C',
+  D = 'D',
+  F = 'F',
+}
+
+
 export type DnDMonster = {
   uuid: string;
   name: string;
@@ -102,6 +118,7 @@ export type DnDMonster = {
   birthTimestamp: Date;
   species: SpeciesInfo;
   evolutionStage: EvolutionStage;
+  tier: Tier;
   enclosureCost: number;
   baseSalePrice: number;
   strength: AttributeValueWithOptionalValue; // Directly use the interface here
@@ -110,6 +127,7 @@ export type DnDMonster = {
   gestationPeriod: AttributeValueWithOptionalValue;
   yieldBonus: AttributeValueWithOptionalValue;
   lastEvolutionTimestamp: Date;
+  nerfed: DnDMonster;
   progressTowardsNextEvolution: number;
 }
 

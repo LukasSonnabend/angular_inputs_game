@@ -25,7 +25,7 @@
     <ng-template #elseContainer>
       <button class="button button-primary z-100" (click)="breedService.breakBreedingPod(pod.uuid)">Stop breeding</button>
       <p>Time to Hatch: {{pod.countDown | Round:0:Direction.UP}} seconds</p>
-      <p>Done at {{calculateTotalTime(pod.breedingStartDateTime, pod.timeToHatch)}}</p>
+      <p>Done at {{calculateTotalTime(pod.breedingStartDateTime, (pod.timeToHatch))}}</p>
       <!-- Progress Bar -->
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div class="bg-blue-600 h-2.5 rounded-full" [style.width]="getBreedingProgress() + '%'"></div>

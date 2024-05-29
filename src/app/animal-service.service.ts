@@ -4,6 +4,7 @@ import { BreedingServiceService } from './breeding-service.service';
 import { IndexedDBService } from './indexed-db.service';
 import { MonsterSelectionService } from './service/monster-selection-service/monster-selection-service.service';
 import { BreedingPod, EvolutionStage } from '../types';
+import {MS_TO_DAYS, evolutionStageNerfed} from '../util';
 @Injectable({
   providedIn: 'root'
 })
@@ -55,7 +56,7 @@ export class AnimalService {
         if (!monster.lastEvolutionTimestamp) {
           monster.lastEvolutionTimestamp = new Date(monster.birthTimestamp);
         }
-        const cycleTimeMilis = monster.species.cycleTime * 24 * 60 * 60 * 10; // Corrected to milliseconds
+        const cycleTimeMilis = monster.species.cycleTime * MS_TO_DAYS; // Corrected to milliseconds
   
         if (monster.lastEvolutionTimestamp > Date.now()) {
           // If the last evolution time is in the future, reset it to now
@@ -70,9 +71,13 @@ export class AnimalService {
   
         // Keep evolving the monster as long as it's eligible
         while (timeSinceLastEvolution >= cycleTimeMilis || progressPercentage >= 1) {
+          
           monster.lastEvolutionTimestamp = new Date(lastEvolutionTime + cycleTimeMilis); // Update to the time of this evolution
           const stages = [EvolutionStage.baby, EvolutionStage.teen, EvolutionStage.adult];
           let stageInt = EvolutionStage[monster.evolutionStage] // das hier ist int
+          // @ts-ignore
+          monster.nerfed = evolutionStageNerfed(monster as DnDMonster);
+
           // @ts-ignore
           if (stageInt === 2) return monster;
           // @ts-ignore

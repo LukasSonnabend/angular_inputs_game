@@ -4,6 +4,7 @@ import { BreedingServiceService } from '../breeding-service.service';
 import { CommonModule } from '@angular/common';
 import { Direction, RoundPipe } from '../round.pipe';
 import { BreedingPod, Gender } from '../../types';
+import { MS_TO_DAYS } from '../../util';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class BreedingPodComponent {
   constructor(protected breedService: BreedingServiceService) { }
 
   calculateTotalTime(breedingStartDateTime: Date, timeToHatch: number): string {
-    const totalTime = new Date(breedingStartDateTime?.getTime() + timeToHatch * 1000);
+    const totalTime = new Date(breedingStartDateTime?.getTime() + timeToHatch * MS_TO_DAYS);
     return totalTime.toLocaleString();
   }
 
@@ -31,7 +32,7 @@ export class BreedingPodComponent {
   getBreedingProgress(): number {
     const now = new Date();
     const startTime = this.pod.breedingStartDateTime.getTime();
-    const endTime = startTime + this.pod.timeToHatch * 1000;
+    const endTime = startTime + this.pod.timeToHatch * MS_TO_DAYS;
     const totalTime = endTime - startTime;
     const elapsedTime = now.getTime() - startTime;
     const progress = (elapsedTime / totalTime) * 100;

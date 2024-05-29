@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BreedingPod, DnDMonster } from '../types'; // Assuming BreedingPod is correctly defined in your types
 import { AnimalService } from './animal-service.service';
 import { genOffspring } from './helpers/generateOffspring';
+import { MS_TO_DAYS } from '../util';
 
 
 @Injectable({
@@ -81,9 +82,10 @@ export class BreedingServiceService {
         }
         // Convert breedingStartDateTime from string back to Date object if necessary
         const breedingStart = new Date(pod.breedingStartDateTime);
-        // Assuming timeToHatch is initially in seconds, convert it to milliseconds
-        const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * 1000);
+        // Assuming timeToHatch is initially in days, convert it to milliseconds
+        const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS);
         // Calculate the remaining time in seconds
+
         let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
         remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
         return { ...pod, countDown: remainingTime };
@@ -129,9 +131,9 @@ export class BreedingServiceService {
         parents: [monster1, monster2],
         offspring: [] as DnDMonster[],
         errorMessage: '',
-        timeToHatch: monster1.gestationPeriod.value + monster2.gestationPeriod.value * 24, 
+        timeToHatch: monster1.gestationPeriod.value + monster2.gestationPeriod.value,    // this is a value in hours
         breedingStartDateTime: new Date(),
-        countDown: -1
+        countDown: Infinity
       };
       this.breedingPodsSubject.next([...currentPods, newPod]);
       this.savePodsToLocalStorage();
