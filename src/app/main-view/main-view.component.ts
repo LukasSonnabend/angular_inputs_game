@@ -11,10 +11,7 @@ import MonsterData from '../resources/monsters.json';
 import { SupabaseService } from '../supabase.service';
 import { DnDMonster, EvolutionStage } from '../../types';
 import { AgGridAngular } from 'ag-grid-angular';
-/* Core Grid CSS */
-import 'ag-grid-community/styles/ag-grid.css';
-/* Quartz Theme Specific CSS */
-import 'ag-grid-community/styles/ag-theme-balham.css';
+
 import { MonsterSelectionService } from '../service/monster-selection-service/monster-selection-service.service';
 
 
