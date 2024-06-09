@@ -23,6 +23,7 @@ export class AnimalService {
     this.setupMaturingProcess();
   }
 
+  private deletingAnimals: string[] = [];
 
 
   
@@ -132,8 +133,13 @@ if (nextStage !== undefined) {
       });
 
       this.animalsSubject.next(updatedAnimals);
-      updatedAnimals.forEach(monster => this.updateAnimal(monster));
-    }, 3000); // Execute every 3000ms (3 seconds)
+      updatedAnimals.forEach(monster => {
+        // Skip updating if the animal is being deleted
+        if (!this.deletingAnimals.includes(monster.uuid)) {
+          this.updateAnimal(monster);
+        }
+      });
+    }, 90_000); // Execute every 3000ms (3 seconds)
   }
 
 
@@ -153,18 +159,18 @@ if (nextStage !== undefined) {
   }
 
   deleteAnimal(uuid: string) {
+    this.deletingAnimals.push(uuid);
+  
     this.indexedDBService.deleteAnimal(uuid).then(() => {
       // remove the animal from the selection service
       this.selectionService.deselectMonster(this.selectionService.getSelectedMonsters().find(animal => animal.uuid === uuid));
-      // remove the animal from the list of animals and or the filtered animals
-      //this.selectionService.getSelectedMonsters().find(animal => animal.uuid === uuid) ? this.loadInitialData() : this.filteredAnimalsSubject.next(this.filteredAnimalsSubject.getValue().filter(animal => animal.uuid !== uuid));
     }).catch(error => {
       console.error('Failed to delete animal:', error);
     }).finally(() => {
+      this.deletingAnimals = this.deletingAnimals.filter(id => id !== uuid);
       this.loadInitialData(); // Reload the animals list to reflect the deletion
     });
   }
-
   updateAnimal(animal: any) {
     // Check if the animal still exists in the animalsSubject
     const existingAnimal = this.animalsSubject.getValue().find(a => a.uuid === animal.uuid);

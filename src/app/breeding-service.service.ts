@@ -92,7 +92,7 @@ export class BreedingServiceService {
       }) as BreedingPod[];
       this.breedingPodsSubject.next(updatedPods);
       this.savePodsToLocalStorage(); // Optionally save the updated pods to localStorage
-    }, 1000); // Update every 1 seconds
+    }, 100_000); // Update every 1 seconds
   }
 
   public breakBreedingPod(podId: string) {
