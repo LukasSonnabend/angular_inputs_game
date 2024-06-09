@@ -1,7 +1,7 @@
 import { DnDMonster, EvolutionStage } from "./types";
 
 
-export const MS_TO_DAYS =  60 * 24;
+export const MS_TO_DAYS =  1000 * 60 * 60 * 24;
 
 export function evolutionStageNerfed(monster: DnDMonster): DnDMonster {
     const nerf = [0.4, 0.8, 1, 0];

@@ -81,6 +81,7 @@ export function genOffspring(animal1: DnDMonster, animal2: DnDMonster ) : DnDMon
         name: randSuperheroName(),
 
         birthTimestamp: new Date(),
+        growthStages: animal1.species.growthStages,
         species: animal1.species,
         // @ts-ignore
         strength: getRandomElement([animal1, animal2]).strength,
