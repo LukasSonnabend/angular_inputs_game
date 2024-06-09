@@ -75,7 +75,7 @@ export function genOffspring(animal1: DnDMonster, animal2: DnDMonster ) : DnDMon
     return {...monster, [attributeToMutate.key]: nextValue};
 
   }
-
+    debugger
     let child = {
         uuid: uuidv4(),
         name: randSuperheroName(),
@@ -97,10 +97,12 @@ export function genOffspring(animal1: DnDMonster, animal2: DnDMonster ) : DnDMon
         gender: Gender[Math.floor(Math.random() * 2) as 0 | 1] as Gender,
         progressTowardsNextEvolution: 0,
           // @ts-ignore
-        evolutionStage: 'baby' as EvolutionStage, 
+        evolutionStage: EvolutionStage[Math.min(...animal1.species.growthStages)] as EvolutionStage,
         enclosureCost: getRandomElement([animal1, animal2]).enclosureCost,
         baseSalePrice: getRandomElement([animal1, animal2]).baseSalePrice,
     } as DnDMonster;
+    // TODO: evolution stage musst be min stage of adults
+
     // @ts-ignore
     child.tier = calcTier(child);
     child.gestationPeriod = (child.gender === animal1.gender ? animal1.gestationPeriod : animal2.gestationPeriod);

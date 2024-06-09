@@ -4,7 +4,7 @@ import { BreedingServiceService } from './breeding-service.service';
 import { IndexedDBService } from './indexed-db.service';
 import { MonsterSelectionService } from './service/monster-selection-service/monster-selection-service.service';
 import { BreedingPod, EvolutionStage } from '../types';
-import {MS_TO_DAYS, evolutionStageNerfed} from '../util';
+import { MS_TO_DAYS, evolutionStageNerfed } from '../util';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +39,7 @@ export class AnimalService {
         // Ensure we have a list of UUIDs for selected monsters for a more reliable comparison
         const selectedMonsterUUIDs = selectedMonsters.map(monster => monster.uuid);
         // Filter out selected and breeding animals
-        const filtered = animals.filter(animal => 
+        const filtered = animals.filter(animal =>
           !selectedMonsterUUIDs.includes(animal.uuid) && // Check against UUIDs for selected monsters
           !breedingMonsters.find(m => m.uuid === animal.uuid)); // Exclude breeding animals
         this.filteredAnimalsSubject.next(filtered);
@@ -57,7 +57,7 @@ export class AnimalService {
           monster.lastEvolutionTimestamp = new Date(monster.birthTimestamp);
         }
         const cycleTimeMilis = monster.species.cycleTime * MS_TO_DAYS; // Corrected to milliseconds
-  
+
         if (monster.lastEvolutionTimestamp > Date.now()) {
           // If the last evolution time is in the future, reset it to now
           monster.lastEvolutionTimestamp = Date.now();
@@ -66,24 +66,38 @@ export class AnimalService {
         let timeSinceLastEvolution = Date.now() - lastEvolutionTime;
         let progressPercentage = Math.min((timeSinceLastEvolution / cycleTimeMilis) * 100, 100);
 
-
-        
-  
         // Keep evolving the monster as long as it's eligible
+      // Keep evolving the monster as long as it's eligible
         while (timeSinceLastEvolution >= cycleTimeMilis || progressPercentage >= 1) {
-          
           monster.lastEvolutionTimestamp = new Date(lastEvolutionTime + cycleTimeMilis); // Update to the time of this evolution
-          const stages = [EvolutionStage.baby, EvolutionStage.teen, EvolutionStage.adult];
+          const stages = monster.species.growthStages.map((stage: number) => EvolutionStage[stage]);
           let stageInt = EvolutionStage[monster.evolutionStage] // das hier ist int
           // @ts-ignore
           monster.nerfed = evolutionStageNerfed(monster as DnDMonster);
+// debugger
+          // @ts-ignore
+          
+          // Assuming `monster` is the monster object and `stageInt` is the current stage as an integer
+// Find the next stage that is greater than the current stage
+let nextStage = monster.growthStages.find(stage => stage > stageInt);
 
-          // @ts-ignore
-          if (stageInt === 2) return monster;
-          // @ts-ignore
-          monster.evolutionStage = EvolutionStage[stages[stageInt + 1]];
+if (nextStage !== undefined) {
+  // The next stage exists for this species, so evolve the monster
+  monster.evolutionStage = EvolutionStage[nextStage];
+} else {
+  // The next stage does not exist for this species, so do not evolve the monster
+  return monster;
+}
+          // if (stageInt + 1 === stages[stages.length - 1]) return monster; // Check if it's the last stage
+
+          // if (stageInt + 1 < stages.length) {
+          //   // Update the evolution stage to the next one
+          //   monster.evolutionStage = EvolutionStage[stages[stageInt + 1]];
+          // } else {
+          //   return monster; // If there's no next stage, return the monster as is
+          // }
           monster.progressTowardsNextEvolution = 0;
-  
+
           // Calculate the time and progress for the next potential evolution
           lastEvolutionTime = monster.lastEvolutionTimestamp.getTime();
           if (Date.now() >= lastEvolutionTime) {
@@ -94,13 +108,13 @@ export class AnimalService {
             progressPercentage = 0;
           }
         }
-      
+
         // If the monster is not yet ready for the next evolution, update the progress
         monster.progressTowardsNextEvolution = progressPercentage;
-  
+
         return monster;
       });
-  
+
       this.animalsSubject.next(updatedAnimals);
       updatedAnimals.forEach(monster => this.updateAnimal(monster));
     }, 3000); // Execute every 3000ms (3 seconds)

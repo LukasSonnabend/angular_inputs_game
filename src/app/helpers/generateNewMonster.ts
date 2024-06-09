@@ -152,6 +152,7 @@ export function generateNewMonsterW(speciesInc: string, evolutionStageInc: strin
       evolutionStage: evolutionStageInc,//EvolutionStage[Math.floor(Math.random() * 3) as 0 | 1 | 2],
       lastEvolutionTimestamp: birthTimestamp, 
       birthTimestamp,
+      growthStages: species.growthStages,
       enclosureCost: species.enclosureCost,
       species: species,
       baseSalePrice: species.baseSalePrice,

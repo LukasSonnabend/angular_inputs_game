@@ -1,23 +1,101 @@
 [
   {
-    "name": "Nexu",
+    "species": "Colo Klauenfische",
+    "name": "Colo Klauenfische",
+    "homeworld": "Naboo",
     "cycleTime": 6,
-    "enclosureCost": 1000,
-    "baseSalePrice": 1000,
-    "species": "Nexu",
-    "homeworld": "Cholganna",
-    "description": "Agile, feline creature with sharp teeth and claws, often used as a hunting beast.",
-    "image_url": "https://static.wikia.nocookie.net/starwars/images/0/0a/Nexu2-SWE.png"
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/b/b2/Colo_claw_fish.png",
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": 4000,
+    "baseSalePrice": 4000,
+    "enclosureCost": 0
   },
   {
-    "name": "Wampa",
-    "species": "Wampa",
+    "species": "Bantha",
+    "name": "Bantha",
+    "homeworld": "Tatooine",
+    "cycleTime": 5,
+    "image_url":"https://static.wikia.nocookie.net/starwars/images/a/aa/Bantha-SWCT.png",
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": "1 L Milch / 1 Tag\n1 Bantha Fell/ 7 Tage",
     "baseSalePrice": 1000,
-    "homePlanet": "Hoth",
-    "enclosureCost": 1000,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Dewback",
+    "name": "Dewback",
+    "homeworld": "Tatooine",
+    "cycleTime": 6,
+    "image_url":"https://static.wikia.nocookie.net/starwars/images/8/84/Dewback-SS.png",
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": 2000,
+    "baseSalePrice": 2000,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Woodoo",
+    "name": "Woodoo",
+    "homeworld": "Tatooine",
     "cycleTime": 3,
-    "description": "Snow-dwelling predator with white fur and sharp claws, known for attacking unwary travelers on Hoth.",
-    "image_url": "https://static.wikia.nocookie.net/starwars/images/d/d0/SkywalkerWampa.jpg"
+    "image_url": "https://static.wikia.nocookie.net/jedipedia/images/3/38/Woodoo.jpg/revision/latest?cb=20070430211048&path-prefix=de", 
+    "growthStages": [-1, 0, 1, 2],
+    "standardYieldPerLargeAnimal": 800,
+    "baseSalePrice": 800,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Urusai",
+    "name": "Urusai",
+    "homeworld": "Tatooine",
+    "image_url": "https://static.wikia.nocookie.net/jedipedia/images/3/3a/Urusai.jpg",
+    "cycleTime": 5,
+    "growthStages": [-1, 2],
+    "standardYieldPerLargeAnimal": 50,
+    "baseSalePrice": 50,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Sketto Schwarm",
+    "name": "Tatooine",
+    "homeworld": "Tatooine",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/b/bb/Sketto-woswfg.jpg",
+    "cycleTime": 2,
+    "growthStages": [-1,2],
+    "standardYieldPerLargeAnimal": "1 Sketto Schwarm Haut/4 Tag",
+    "baseSalePrice": 10,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Ruping",
+    "name": "Ruping",
+    "homeworld": "Dagobah",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/5/58/Ruping_SoT.png",
+    "cycleTime": 6,
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": 2000,
+    "baseSalePrice": 2000,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Spot light Sloth",
+    "name": "Spot light Sloth",
+    "homeworld": "Dagobah",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/a/aa/Spot-Light_Sloth.jpg/revision/latest?cb=20090713023217", 
+    "cycleTime": 5,
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": 1500,
+    "baseSalePrice": 1500,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Knobby white Spider",
+    "name": "Knobby white Spider",
+    "homeworld": "Dagobah",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/b/ba/KnobbyWhiteSpider-wswfg.jpg",
+    "cycleTime": 6,
+    "growthStages": [0,1,2],
+    "standardYieldPerLargeAnimal": "5m Spinnenseil/ Tag",
+    "baseSalePrice": 3500,
+    "enclosureCost": 0
   }
-
 ]

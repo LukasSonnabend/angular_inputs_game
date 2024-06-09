@@ -11,11 +11,14 @@ import { Animal, EvolutionStage } from '../../types';
 export class EvolutionStepperComponent {
   @Input() monster!: Animal; 
 EvolutionStage: typeof EvolutionStage = EvolutionStage;
+  get maxStage() {
+    return Math.max(...this.monster.growthStages);
+  }
 
 
   // derive current stage of evolution from monster data
   get currentStage() {
-    return EvolutionStage[this.monster.evolutionStage as unknown as keyof typeof EvolutionStage]
+    return EvolutionStage[this.monster.evolutionStage as unknown as keyof typeof EvolutionStage] + 1
   }
   
 

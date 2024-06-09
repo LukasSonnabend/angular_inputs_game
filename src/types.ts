@@ -3,6 +3,7 @@ export type Animal = DnDMonster | FarmMonster;
 type SpeciesInfo = {
 name: string;
 species: string;
+growthStages: number[];
 cycleTime: number;
 description: string;
 homePlanet: string;
@@ -90,6 +91,7 @@ export type BreedingPod = {
 }
 
 export enum EvolutionStage {
+  egg = -1,
   baby = 0,
   teen = 1,
   adult = 2
@@ -118,6 +120,7 @@ export type DnDMonster = {
   birthTimestamp: Date;
   species: SpeciesInfo;
   evolutionStage: EvolutionStage;
+  growthStages: number[];
   tier: Tier;
   enclosureCost: number;
   baseSalePrice: number;
