@@ -73,7 +73,7 @@
                 <div>{{monster?.species?.description}}</div>
             </div>
         </div>
-        <p>{{monster?.progressTowardsNextEvolution}}</p>
+        <!-- <p>{{monster?.evolutionStage}}</p> -->
           <p *ngIf="monster">Done at {{ calculateTotalTime(monster.species.cycleTime! * MS_TO_DAYS, monster) }}</p>
     </div>
     <div *ngIf="showDataView" class="data-view">

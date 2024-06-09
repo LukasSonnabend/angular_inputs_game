@@ -180,6 +180,27 @@ export class IndexedDBService {
     });
   }
 
+
+  clearAllAnimals(): Promise<void> {
+
+    return this.getDBPromise().then(db => {
+      // remove all data from indexedDB
+      const transaction = db.transaction(this.storeName, 'readwrite');
+      const store = transaction.objectStore(this.storeName);
+      store.clear();
+      
+      transaction.oncomplete = () => {
+        console.log('All animals have been deleted.');
+      };
+
+      transaction.onerror = (event) => {
+        console.error('Failed to delete all animals:', (event.target as IDBRequest).error);
+      };
+    }
+    );
+  }
+
+
   updateRecord(record: {uuid: string}): Promise<void> {
     // Ensure that the animal object has a 'uuid' property.
     if (!record.uuid) {

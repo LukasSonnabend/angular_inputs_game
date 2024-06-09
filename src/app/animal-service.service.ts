@@ -9,7 +9,7 @@ import { MS_TO_DAYS, evolutionStageNerfed } from '../util';
   providedIn: 'root'
 })
 export class AnimalService {
-  private animalsSubject = new BehaviorSubject<any[]>([]);
+  public animalsSubject = new BehaviorSubject<any[]>([]);
   public animals$ = this.animalsSubject.asObservable();
   private filteredAnimalsSubject = new BehaviorSubject<any[]>([]);
   public filteredAnimals$ = this.filteredAnimalsSubject.asObservable();
@@ -22,6 +22,22 @@ export class AnimalService {
     this.initializeFilteredAnimals();
     this.setupMaturingProcess();
   }
+
+
+
+  
+  public async restoreSavedData(data: any[]) {
+    try {
+      await this.indexedDBService.clearAllAnimals();
+      data.forEach(async (animal) => {
+        await this.indexedDBService.addAnimal(animal);
+      });
+      this.loadInitialData();
+    } catch (error) {
+      console.error('Failed to restore saved data:', error);
+    }
+  }
+
 
   private async loadInitialData() {
     try {
