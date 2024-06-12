@@ -139,7 +139,7 @@ if (nextStage !== undefined) {
           this.updateAnimal(monster);
         }
       });
-    }, 90_000); // Execute every 3000ms (3 seconds)
+    }, 1_000); // Execute every 3000ms (3 seconds)
   }
 
 

@@ -18,6 +18,7 @@ import { MonsterSelectionService } from '../service/monster-selection-service/mo
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { max } from 'rxjs';
+import { BreedingServiceService } from '../breeding-service.service';
 
 @Component({
   standalone: true,
@@ -108,7 +109,7 @@ export class MainViewComponent implements OnInit {
   selectedGrowthStage: string = '';
   evolutionStages = Object.keys(EvolutionStage).filter(k => isNaN(Number(k)));  // 
 
-  constructor(private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService) {}
+  constructor(private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService, private breedingService: BreedingServiceService) {}
 
   colDefs = [
     { headerName: 'Select', maxWidth: 75, cellRenderer: CustomButtonComponent, cellRendererParams: { onClick: (e: DnDMonster) => this.onSelectAnimal(e)  }
@@ -171,16 +172,23 @@ export class MainViewComponent implements OnInit {
     // save the data from the animal service to supabase
     const jsonB = JSON.stringify(this.animals);
     this.supabase.insertIntoSaves([jsonB]);
+    const breedingPodsData = JSON.stringify(this.breedingService.getBreedingPods());    
+    this.supabase.insertIntoPods(breedingPodsData)
   }
-
 }
 
   async loadFromSupabase() {
     // this.supabase.loadLastSave();
     // insert the data from supabase into the animal service
-    if (confirm('Are you sure you want to load the last save?'))
-      this.animalService.animalsSubject.next(await this.supabase.loadLastSave());
+    if (confirm('Are you sure you want to load the last save?')) {
+    this.supabase.loadLastSave().then((data: any) => {
+      this.breedingService.restoreSavedData(data.podsData)
+      this.animalService.animalsSubject.next(data.animalData);
+    }).catch((error: any) => {
+      console.error('Failed to load data:', error);
+    })
   }
+}
 
 
 

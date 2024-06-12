@@ -24,6 +24,15 @@ export class BreedingServiceService {
     }
   }
 
+  public getBreedingPods() {
+    return this.breedingPodsSubject.getValue();
+  }
+
+  public restoreSavedData(data: BreedingPod[]) {
+    debugger
+    this.breedingPodsSubject.next(data);
+  }
+
   private get animalService(): AnimalService {
     if (!this._animalService) {
       this._animalService = this.injector.get(AnimalService);
@@ -65,19 +74,20 @@ export class BreedingServiceService {
     if (this.breedingPodsSubject.getValue().length === 0) {
       return; // No pods to update
     }
+  
+    // Update operation every 10 seconds
     setInterval(() => {
       BreedingServiceService.intervalSet = true; // Mark that the interval has been set
       const currentPods = this.breedingPodsSubject.getValue();
       const now = new Date(); // Get the current time
       const updatedPods = currentPods.map(pod => {
-
+  
         if (pod?.countDown != undefined && pod?.countDown <= 0) {
-
+  
           if (pod.offspring.length === 0) {
             return this.createOffspringForPod(pod);
           }
-          
-          
+  
           return pod;
         }
         // Convert breedingStartDateTime from string back to Date object if necessary
@@ -85,14 +95,18 @@ export class BreedingServiceService {
         // Assuming timeToHatch is initially in days, convert it to milliseconds
         const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS);
         // Calculate the remaining time in seconds
-
+  
         let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
         remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
         return { ...pod, countDown: remainingTime };
       }) as BreedingPod[];
       this.breedingPodsSubject.next(updatedPods);
-      this.savePodsToLocalStorage(); // Optionally save the updated pods to localStorage
-    }, 100_000); // Update every 1 seconds
+    }, 10_000); // Update every 10 seconds
+  
+    // Save operation every 1 second
+    setInterval(() => {
+      this.savePodsToLocalStorage(); // Save the updated pods to localStorage
+    }, 1_000); // Save every 1 second
   }
 
   public breakBreedingPod(podId: string) {
