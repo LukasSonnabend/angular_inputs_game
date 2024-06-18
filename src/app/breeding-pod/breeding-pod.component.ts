@@ -31,7 +31,8 @@ export class BreedingPodComponent {
 
   getBreedingProgress(): number {
     const now = new Date();
-    const startTime = this.pod.breedingStartDateTime.getTime();
+    debugger
+    const startTime = this.pod.breedingStartDateTime?.getTime();
     const endTime = startTime + this.pod.timeToHatch * MS_TO_DAYS;
     const totalTime = endTime - startTime;
     const elapsedTime = now.getTime() - startTime;

@@ -29,7 +29,15 @@ export class BreedingServiceService {
   }
 
   public restoreSavedData(data: BreedingPod[]) {
-    this.breedingPodsSubject.next(data);
+    let dateParsed = data.map(pod => {
+      return {
+        ...pod,
+        breedingStartDateTime: new Date(pod.breedingStartDateTime)
+      }
+    })
+
+
+    this.breedingPodsSubject.next(dateParsed);
   }
 
   private get animalService(): AnimalService {
@@ -69,6 +77,11 @@ export class BreedingServiceService {
     return updatedPod
   }
 
+  calculateTotalTime(breedingStartDateTime: Date, timeToHatch: number): Date {
+    const totalTime = new Date(breedingStartDateTime?.getTime() + timeToHatch * MS_TO_DAYS);
+    return totalTime;
+  }
+
   updateTimeToHatch() {
     if (this.breedingPodsSubject.getValue().length === 0) {
       return; // No pods to update
@@ -79,7 +92,7 @@ export class BreedingServiceService {
       const now = new Date(); // Get the current time
       const updatedPods = currentPods.map(pod => {
 
-        if (pod?.countDown != undefined && pod?.countDown <= 0) {
+        if ((pod?.countDown != undefined && pod?.countDown <= 0) ||  this.calculateTotalTime(pod.breedingStartDateTime, pod.timeToHatch) <= now) {
 
           if (pod.offspring.length === 0) {
             return this.createOffspringForPod(pod);
@@ -100,7 +113,7 @@ export class BreedingServiceService {
       }) as BreedingPod[];
       this.breedingPodsSubject.next(updatedPods);
       this.savePodsToLocalStorage(); // Optionally save the updated pods to localStorage
-    }, 20_000); // Update every 1 seconds
+    }, 5_000); // Update every 5 seconds
   }
 
   public breakBreedingPod(podId: string) {
