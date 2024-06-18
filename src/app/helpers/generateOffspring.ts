@@ -75,7 +75,6 @@ export function genOffspring(animal1: DnDMonster, animal2: DnDMonster ) : DnDMon
     return {...monster, [attributeToMutate.key]: nextValue};
 
   }
-    debugger
     let child = {
         uuid: uuidv4(),
         name: randSuperheroName(),

@@ -29,7 +29,6 @@ export class BreedingServiceService {
   }
 
   public restoreSavedData(data: BreedingPod[]) {
-    debugger
     this.breedingPodsSubject.next(data);
   }
 
@@ -92,10 +91,10 @@ export class BreedingServiceService {
         // Convert breedingStartDateTime from string back to Date object if necessary
         const breedingStart = new Date(pod.breedingStartDateTime);
         // Assuming timeToHatch is initially in days, convert it to milliseconds
-        const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS);
+        const hatchDate = new Date(breedingStart?.getTime() + pod.timeToHatch * MS_TO_DAYS);
         // Calculate the remaining time in seconds
 
-        let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
+        let remainingTime = (hatchDate?.getTime() - now?.getTime()) / 1000;
         remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
         return { ...pod, countDown: remainingTime };
       }) as BreedingPod[];

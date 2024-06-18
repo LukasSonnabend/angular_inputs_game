@@ -91,7 +91,7 @@ export class AnimalService {
           let stageInt = EvolutionStage[monster.evolutionStage] // das hier ist int
           // @ts-ignore
           monster.nerfed = evolutionStageNerfed(monster as DnDMonster);
-// debugger
+
           // @ts-ignore
           
           // Assuming `monster` is the monster object and `stageInt` is the current stage as an integer
