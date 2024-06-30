@@ -1,14 +1,13 @@
-import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
-import { BreedingPod, DnDMonster } from '../types'; // Assuming BreedingPod is correctly defined in your types
-import { AnimalService } from './animal-service.service';
-import { genOffspring } from './helpers/generateOffspring';
-import { MS_TO_DAYS } from '../util';
-
+import { Injectable, Injector } from "@angular/core";
+import { BehaviorSubject, interval, startWith, switchMap } from "rxjs";
+import { v4 as uuidv4 } from "uuid";
+import { BreedingPod, DnDMonster } from "../types"; // Assuming BreedingPod is correctly defined in your types
+import { AnimalService } from "./animal-service.service";
+import { genOffspring } from "./helpers/generateOffspring";
+import { MS_TO_DAYS } from "../util";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class BreedingServiceService {
   private breedingPodsSubject = new BehaviorSubject<BreedingPod[]>([]);
@@ -16,12 +15,9 @@ export class BreedingServiceService {
   private _animalService: AnimalService | undefined;
   private static intervalSet = false; // Static variable to track interval setup
 
-
   constructor(private injector: Injector) {
-    this.loadPodsFromLocalStorage(); // Load initial pods on service initialization
-    if (!BreedingServiceService.intervalSet) { // Check if the interval has not been set
-      this.updateTimeToHatch(); // Start the timer to update time to hatch
-    }
+    this.loadPodsFromLocalStorage();
+    this.initiateUpdateCycle();
   }
 
   private get animalService(): AnimalService {
@@ -31,20 +27,65 @@ export class BreedingServiceService {
     return this._animalService;
   }
 
+  private updatePods() {
+    const currentPods = this.breedingPodsSubject.getValue();
+    if (currentPods.length === 0) {
+      return; // No pods to update
+    }
+    const now = new Date();
+    const updatedPods = currentPods.map((pod) => {
+      // Your existing logic for updating pods
+
+      const currentPods = this.breedingPodsSubject.getValue();
+      const now = new Date(); // Get the current time
+      const updatedPods = currentPods.map((pod) => {
+        if (pod?.countDown != undefined && pod?.countDown <= 0) {
+          if (pod.offspring.length === 0) {
+            return this.createOffspringForPod(pod);
+          }
+
+          return pod;
+        }
+        // Convert breedingStartDateTime from string back to Date object if necessary
+        const breedingStart = new Date(pod.breedingStartDateTime);
+        // Assuming timeToHatch is initially in days, convert it to milliseconds
+        const hatchDate = new Date(
+          breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS
+        );
+        // Calculate the remaining time in seconds
+
+        let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
+        remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
+        return { ...pod, countDown: remainingTime };
+      }) as BreedingPod[];
+      this.breedingPodsSubject.next(updatedPods);
+    });
+    // this.breedingPodsSubject.next(updatedPods);
+    this.savePodsToLocalStorage();
+  }
+
+  private initiateUpdateCycle() {
+    interval(100_000) // Update every 100 seconds
+      .pipe(
+        startWith(0), // Start immediately upon subscription
+        switchMap(async () => this.updatePods())
+      )
+      .subscribe();
+  }
 
   savePodsToLocalStorage() {
     const currentPods = this.breedingPodsSubject.getValue(); // Get the current value of the BehaviorSubject
-    localStorage.setItem('breedingPods', JSON.stringify(currentPods)); // Save it to localStorage
+    localStorage.setItem("breedingPods", JSON.stringify(currentPods)); // Save it to localStorage
   }
 
   loadPodsFromLocalStorage() {
-    const podsString = localStorage.getItem('breedingPods');
+    const podsString = localStorage.getItem("breedingPods");
     if (podsString) {
       let pods: BreedingPod[] = JSON.parse(podsString);
       // Convert breedingStartDateTime from string to Date object
-      pods = pods.map(pod => ({
+      pods = pods.map((pod) => ({
         ...pod,
-        breedingStartDateTime: new Date(pod.breedingStartDateTime)
+        breedingStartDateTime: new Date(pod.breedingStartDateTime),
       }));
       this.breedingPodsSubject.next(pods); // Update the BehaviorSubject with the loaded pods
     }
@@ -56,49 +97,48 @@ export class BreedingServiceService {
 
     // Update the passed pod's offspring array directly
     const updatedPod = { ...pod, offspring: [...pod.offspring, a] };
-  
+
     // Update the BehaviorSubject with the modified pod
-    return updatedPod
+    return updatedPod;
   }
 
-  updateTimeToHatch() {
-    if (this.breedingPodsSubject.getValue().length === 0) {
-      return; // No pods to update
-    }
-    setInterval(() => {
-      BreedingServiceService.intervalSet = true; // Mark that the interval has been set
-      const currentPods = this.breedingPodsSubject.getValue();
-      const now = new Date(); // Get the current time
-      const updatedPods = currentPods.map(pod => {
+  // updateTimeToHatch() {
+  //   if (this.breedingPodsSubject.getValue().length === 0) {
+  //     return; // No pods to update
+  //   }
+  //   setInterval(() => {
+  //     BreedingServiceService.intervalSet = true; // Mark that the interval has been set
+  //     const currentPods = this.breedingPodsSubject.getValue();
+  //     const now = new Date(); // Get the current time
+  //     const updatedPods = currentPods.map(pod => {
 
-        if (pod?.countDown != undefined && pod?.countDown <= 0) {
+  //       if (pod?.countDown != undefined && pod?.countDown <= 0) {
 
-          if (pod.offspring.length === 0) {
-            return this.createOffspringForPod(pod);
-          }
-          
-          
-          return pod;
-        }
-        // Convert breedingStartDateTime from string back to Date object if necessary
-        const breedingStart = new Date(pod.breedingStartDateTime);
-        // Assuming timeToHatch is initially in days, convert it to milliseconds
-        const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS);
-        // Calculate the remaining time in seconds
+  //         if (pod.offspring.length === 0) {
+  //           return this.createOffspringForPod(pod);
+  //         }
 
-        let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
-        remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
-        return { ...pod, countDown: remainingTime };
-      }) as BreedingPod[];
-      this.breedingPodsSubject.next(updatedPods);
-      this.savePodsToLocalStorage(); // Optionally save the updated pods to localStorage
-    }, 100_000); // Update every 1 seconds
-  }
+  //         return pod;
+  //       }
+  //       // Convert breedingStartDateTime from string back to Date object if necessary
+  //       const breedingStart = new Date(pod.breedingStartDateTime);
+  //       // Assuming timeToHatch is initially in days, convert it to milliseconds
+  //       const hatchDate = new Date(breedingStart.getTime() + pod.timeToHatch * MS_TO_DAYS);
+  //       // Calculate the remaining time in seconds
+
+  //       let remainingTime = (hatchDate.getTime() - now.getTime()) / 1000;
+  //       remainingTime = Math.max(remainingTime, 0); // Ensure remaining time doesn't go below 0
+  //       return { ...pod, countDown: remainingTime };
+  //     }) as BreedingPod[];
+  //     this.breedingPodsSubject.next(updatedPods);
+  //     this.savePodsToLocalStorage(); // Optionally save the updated pods to localStorage
+  //   }, 100_000); // Update every 1 seconds
+  // }
 
   public breakBreedingPod(podId: string) {
     const currentPods = this.breedingPodsSubject.getValue();
     // Filter out the pod with the matching podId
-    const updatedPods = currentPods.filter(pod => pod.uuid !== podId);
+    const updatedPods = currentPods.filter((pod) => pod.uuid !== podId);
     this.breedingPodsSubject.next(updatedPods);
     this.savePodsToLocalStorage();
   }
@@ -106,7 +146,7 @@ export class BreedingServiceService {
   public claimOffspring(podId: string) {
     const currentPods = this.breedingPodsSubject.getValue();
     // Find the pod with the matching podId and grab the Offspring and put it into the AnimalService
-    const offspring = currentPods.find(pod => pod.uuid === podId)?.offspring
+    const offspring = currentPods.find((pod) => pod.uuid === podId)?.offspring;
     if (offspring) {
       let newBorn = offspring[0];
       this.animalService.addAnimal(newBorn);
@@ -120,8 +160,10 @@ export class BreedingServiceService {
     const currentPods = this.breedingPodsSubject.getValue();
     if (podId) {
       // If podId is provided, add both monsters to the existing pod
-      const updatedPods = currentPods.map(pod => 
-        pod.uuid === podId ? { ...pod, monsters: [...pod.parents, monster1, monster2] } : pod
+      const updatedPods = currentPods.map((pod) =>
+        pod.uuid === podId
+          ? { ...pod, monsters: [...pod.parents, monster1, monster2] }
+          : pod
       );
       this.breedingPodsSubject.next(updatedPods);
     } else {
@@ -130,13 +172,14 @@ export class BreedingServiceService {
         uuid: uuidv4(), // Generate a unique ID for the new pod
         parents: [monster1, monster2],
         offspring: [] as DnDMonster[],
-        errorMessage: '',
-        timeToHatch: monster1.gestationPeriod.value + monster2.gestationPeriod.value,    // this is a value in hours
+        errorMessage: "",
+        timeToHatch:
+          monster1.gestationPeriod.value + monster2.gestationPeriod.value, // this is a value in hours
         breedingStartDateTime: new Date(),
-        countDown: Infinity
+        countDown: Infinity,
       };
       this.breedingPodsSubject.next([...currentPods, newPod]);
       this.savePodsToLocalStorage();
     }
   }
-} 
+}

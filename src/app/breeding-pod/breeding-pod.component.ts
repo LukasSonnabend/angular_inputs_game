@@ -36,7 +36,7 @@ export class BreedingPodComponent {
     const totalTime = endTime - startTime;
     const elapsedTime = now.getTime() - startTime;
     const progress = (elapsedTime / totalTime) * 100;
-    return Math.min(Math.max(progress, 0), 100);
+    return Math.round(Math.min(Math.max(progress, 0), 100));
   }
   getGenderString(gender?: Gender): string {
     if (gender === undefined) return ""
