@@ -109,7 +109,7 @@ export class MainViewComponent implements OnInit {
   selectedGrowthStage: string = '';
   evolutionStages = Object.keys(EvolutionStage).filter(k => isNaN(Number(k)));  // 
 
-  constructor(private cdr: ChangeDetectorRef, private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService) {}
+  constructor(private cdr: ChangeDetectorRef, private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService, private breedingService: BreedingServiceService) {}
 
   colDefs = [
     { headerName: 'Select', maxWidth: 75, cellRenderer: CustomButtonComponent, cellRendererParams: { onClick: (e: DnDMonster) => this.onSelectAnimal(e)  }
@@ -180,6 +180,7 @@ export class MainViewComponent implements OnInit {
 async loadFromSupabase() {
   if (confirm('Are you sure you want to load the last save?')) {
     const data = await this.supabase.loadLastSave();
+    // @ts-ignore
     this.animalService.animalsSubject.next(data);
     this.cdr.detectChanges(); // Manually trigger change detection
   }
