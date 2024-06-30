@@ -6,7 +6,6 @@ export const maturityValidator: ValidatorFn = (control: AbstractControl): Valida
     const formGroup = control as FormGroup;
     const animal1 = formGroup.get('animalInput1')?.value as DnDMonster;
     const animal2 = formGroup.get('animalInput2')?.value as DnDMonster;
-    console.log(formGroup)
     if (!animal1 || !animal2) {
         return null;
     }
