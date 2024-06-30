@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import 'zone.js';
 import { AnimalFormComponent } from "../../app/animal-form/animal-form.component";
@@ -109,7 +109,7 @@ export class MainViewComponent implements OnInit {
   selectedGrowthStage: string = '';
   evolutionStages = Object.keys(EvolutionStage).filter(k => isNaN(Number(k)));  // 
 
-  constructor(private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService, private breedingService: BreedingServiceService) {}
+  constructor(private cdr: ChangeDetectorRef, private animalService: AnimalService, private supabase: SupabaseService, private selectionService: MonsterSelectionService) {}
 
   colDefs = [
     { headerName: 'Select', maxWidth: 75, cellRenderer: CustomButtonComponent, cellRendererParams: { onClick: (e: DnDMonster) => this.onSelectAnimal(e)  }
@@ -177,16 +177,11 @@ export class MainViewComponent implements OnInit {
   }
 }
 
-  async loadFromSupabase() {
-    // this.supabase.loadLastSave();
-    // insert the data from supabase into the animal service
-    if (confirm('Are you sure you want to load the last save?')) {
-    this.supabase.loadLastSave().then((data: any) => {
-      this.breedingService.restoreSavedData(data.podsData)
-      this.animalService.animalsSubject.next(data.animalData);
-    }).catch((error: any) => {
-      console.error('Failed to load data:', error);
-    })
+async loadFromSupabase() {
+  if (confirm('Are you sure you want to load the last save?')) {
+    const data = await this.supabase.loadLastSave();
+    this.animalService.animalsSubject.next(data);
+    this.cdr.detectChanges(); // Manually trigger change detection
   }
 }
 
@@ -198,14 +193,14 @@ export class MainViewComponent implements OnInit {
 
     this.animalService.animals$.subscribe(animals => {
       this.animals = animals;
-      console.log('Loaded animals:', animals);
+      // console.log('Loaded animals:', animals);
     }, error => {
       console.error('Failed to load animals:', error);
     });
 
     this.animalService.filteredAnimals$.subscribe(filteredAnimals => {
       this.filteredAnimals = filteredAnimals;
-      console.log('Filtered animals:', filteredAnimals);
+      // console.log('Filtered animals:', filteredAnimals);
     }, error => {
       console.error('Failed to load filtered animals:', error);
     });
