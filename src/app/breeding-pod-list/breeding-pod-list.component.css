@@ -1,0 +1,10 @@
+.horizontal-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .horizontal-scroll-container > div {
+    flex: 0 0 auto; /* Prevent the items from shrinking */
+    margin-right: 1rem; /* Optional: Add some space between items */
+  }

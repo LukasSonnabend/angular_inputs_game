@@ -1,5 +1,5 @@
-<div *ngIf="breedingPods">
-    <div *ngFor="let pod of breedingPods" class="mb-4 p-2 border border-gray-200 rounded-lg">
-     <app-breeding-pod [pod]="pod"/>
-    </div>
+<div *ngIf="breedingPods" class="horizontal-scroll-container">
+  <div *ngFor="let pod of breedingPods" class="mb-4 p-2 border border-gray-200 rounded-lg">
+    <app-breeding-pod [pod]="pod"></app-breeding-pod>
   </div>
+</div>
