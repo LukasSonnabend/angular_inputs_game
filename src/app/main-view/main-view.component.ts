@@ -11,12 +11,9 @@ import MonsterData from "../resources/monsters.json";
 import { SupabaseService } from "../supabase.service";
 import { DnDMonster, EvolutionStage } from "../../types";
 import { AgGridAngular } from "ag-grid-angular";
-
 import { MonsterSelectionService } from "../service/monster-selection-service/monster-selection-service.service";
-
 import { ICellRendererAngularComp } from "ag-grid-angular";
 import { ICellRendererParams } from "ag-grid-community";
-import { max } from "rxjs";
 import { BreedingServiceService } from "../breeding-service.service";
 
 @Component({
@@ -53,10 +50,10 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
     <div class="star-wars-theme">
       <div class="flex justify-end">
         <div class="flex gap-10">
-          <button class="button button-primary>" (click)="saveToSupabase()">
+          <button class="button button-primary" (click)="saveToSupabase()">
             save
           </button>
-          <button class="button button-secondary>" (click)="loadFromSupabase()">
+          <button class="button button-secondary" (click)="loadFromSupabase()">
             load
           </button>
         </div>
@@ -169,27 +166,30 @@ export class MainViewComponent implements OnInit {
         onClick: (e: DnDMonster) => this.deleteAnimal(e.uuid),
       },
     },
-    { headerName: "Name", field: "name" },
-    { headerName: "Gender", field: "gender", maxWidth: 100 },
-    { headerName: "Rating", field: "tier", maxWidth: 75 },
-    { headerName: "Species", field: "species.name", maxWidth: 150 },
-    { headerName: "Stage", field: "evolutionStage", maxWidth: 75 },
+    { headerName: "Name", field: "name", filter: true },
+    { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
+    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true },
+    { headerName: "Species", field: "species.name", maxWidth: 150, filter: true },
+    { headerName: "Stage", field: "evolutionStage", maxWidth: 75, filter: true },
     {
       headerName: "Gestation Period",
       field: "nerfed.gestationPeriod.enumValue",
+      filter: true,
     },
-    { headerName: "Stärke", field: "nerfed.strength.enumValue", maxWidth: 125 },
+    { headerName: "Stärke", field: "nerfed.strength.enumValue", maxWidth: 125, filter: true },
     {
       headerName: "Remarkability",
       field: "nerfed.remarkability.enumValue",
       maxWidth: 125,
+      filter: true,
     },
     {
       headerName: "Mutation Chance",
       field: "nerfed.mutationChance.enumValue",
       maxWidth: 130,
+      filter: true,
     },
-    { headerName: "Cycle Length", field: "species.cycleTime", maxWidth: 100 },
+    { headerName: "Cycle Length", field: "species.cycleTime", maxWidth: 100, filter: true },
     // add button to select animal
   ];
 
