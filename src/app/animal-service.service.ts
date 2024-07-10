@@ -33,6 +33,14 @@ export class AnimalService {
     this.initiateUpdateCycle();
   }
 
+  public reinitIndexDB(data: any[]) {
+    this.indexedDBService.clearAllAnimals().then(() => {
+      data.forEach((animal) => {
+        this.indexedDBService.addAnimal(animal);
+      });
+    });
+  }
+
   private deletingAnimals: string[] = [];
 
   private initiateUpdateCycle() {
@@ -44,7 +52,7 @@ export class AnimalService {
       .subscribe();
   }
   updateAnimals(): any {
-    const updatedAnimals = this.animalsSubject.getValue().map((monster) => {
+    const updatedAnimals = this.animalsSubject.getValue()?.map((monster) => {
       // @ts-ignore
       if (EvolutionStage[monster.evolutionStage] === EvolutionStage.adult) {
         return monster;
@@ -157,7 +165,7 @@ export class AnimalService {
     }
   }
 
-  private initializeFilteredAnimals() {
+private initializeFilteredAnimals() {
     combineLatest([
       this.animals$,
       this.selectionService.getSelectedMonstersObservable(),
@@ -168,12 +176,12 @@ export class AnimalService {
       const selectedMonsterUUIDs = selectedMonsters.map(
         (monster) => monster.uuid
       );
-      // Filter out selected and breeding animals
-      const filtered = animals.filter(
+      // Ensure animals is an array before filtering
+      const filtered = Array.isArray(animals) ? animals.filter(
         (animal) =>
           !selectedMonsterUUIDs.includes(animal.uuid) && // Check against UUIDs for selected monsters
           !breedingMonsters.find((m) => m.uuid === animal.uuid)
-      ); // Exclude breeding animals
+      ) : []; // If animals is not an array, return an empty array
       this.filteredAnimalsSubject.next(filtered);
     });
   }

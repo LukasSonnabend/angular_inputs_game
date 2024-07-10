@@ -32,8 +32,9 @@ export class BreedingServiceService {
       }
     })
 
-
+    
     this.breedingPodsSubject.next(dateParsed);
+    this.savePodsToLocalStorage();
   }
 
   private get animalService(): AnimalService {

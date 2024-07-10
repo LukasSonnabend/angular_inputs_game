@@ -180,8 +180,14 @@ export class MainViewComponent implements OnInit {
 async loadFromSupabase() {
   if (confirm('Are you sure you want to load the last save?')) {
     const data = await this.supabase.loadLastSave();
+    console.log('Data:', data);
     // @ts-ignore
-    this.animalService.animalsSubject.next(data);
+    this.animalService.animalsSubject.next(data?.animalData);
+    this.animalService.reinitIndexDB(data?.animalData);
+      // @ts-ignore
+    this.breedingService.restoreSavedData(data?.podsData);
+    
+    
     this.cdr.detectChanges(); // Manually trigger change detection
   }
 }
