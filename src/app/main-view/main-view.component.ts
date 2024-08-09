@@ -149,6 +149,27 @@ export class MainViewComponent implements OnInit {
     private breedingService: BreedingServiceService
   ) {}
 
+  rankingsOrder = [
+    'A', 'A+', 'A-', 
+    'B', 'B+', 'B-', 
+    'C', 'C+', 'C-', 
+    'D', 'D+', 'D-', 
+    'E', 'E+', 'E-', 
+    'F', 'F+', 'F-'
+  ];
+
+  rankingComparator(valueA: string, valueB: string, nodeA: any, nodeB: any, isDescending: boolean): number {
+    const indexA = this.rankingsOrder.indexOf(valueA);
+    const indexB = this.rankingsOrder.indexOf(valueB);
+  
+    if (indexA === -1 || indexB === -1) {
+      throw new Error('Ranking not found in the predefined order');
+    }
+  
+    return indexA - indexB;
+  }
+  
+
   colDefs = [
     {
       headerName: "Select",
@@ -168,7 +189,10 @@ export class MainViewComponent implements OnInit {
     },
     { headerName: "Name", field: "name", filter: true },
     { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
-    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true },
+    // @ts-ignore
+    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true,  
+      comparator: this.rankingComparator.bind(this)    
+    },
     { headerName: "Species", field: "species.name", maxWidth: 150, filter: true },
     { headerName: "Stage", field: "evolutionStage", maxWidth: 75, filter: true },
     {
