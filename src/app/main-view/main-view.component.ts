@@ -9,7 +9,7 @@ import { BreedingPodListComponent } from "../../app/breeding-pod-list/breeding-p
 import { MonsterCardComponent } from "../../app/monster-card/monster-card.component";
 import MonsterData from "../resources/monsters.json";
 import { SupabaseService } from "../supabase.service";
-import { DnDMonster, EvolutionStage } from "../../types";
+import { DnDMonster, EvolutionStage, MutationChance, Remarkability, StrengthAttributeWerte, TrageZeitAttributeWerte, YieldBonus } from "../../types";
 import { AgGridAngular } from "ag-grid-angular";
 import { MonsterSelectionService } from "../service/monster-selection-service/monster-selection-service.service";
 import { ICellRendererAngularComp } from "ag-grid-angular";
@@ -150,12 +150,12 @@ export class MainViewComponent implements OnInit {
   ) {}
 
   rankingsOrder = [
-    'A', 'A+', 'A-', 
-    'B', 'B+', 'B-', 
-    'C', 'C+', 'C-', 
-    'D', 'D+', 'D-', 
-    'E', 'E+', 'E-', 
-    'F', 'F+', 'F-'
+    'A+', 'A', 'A-', 
+    'B+', 'B', 'B-', 
+    'C+', 'C', 'C-', 
+    'D+', 'D', 'D-', 
+    'E+', 'E', 'E-', 
+    'F+', 'F', 'F-'
   ];
 
   rankingComparator(valueA: string, valueB: string, nodeA: any, nodeB: any, isDescending: boolean): number {
@@ -168,6 +168,84 @@ export class MainViewComponent implements OnInit {
   
     return indexA - indexB;
   }
+
+  createEnumMapping<T>(enumObj: T): { [key: string]: number } {
+    // @ts-ignore
+    return Object.keys(enumObj).reduce((acc, key, index) => {
+      // @ts-ignore
+      acc[enumObj[key as keyof T]] = index;
+      return acc;
+    }, {} as { [key: string]: number });
+  }
+
+  enumComparator<T>(enumObj: T) {
+    const mapping = this.createEnumMapping(enumObj);
+    return (a: keyof T, b: keyof T): number => {
+      // @ts-ignore
+      return mapping[a] - mapping[b];
+    };
+  }
+  // StrengthAttributeWerte comparator
+strengthAttributeWerteComparator = this.enumComparator(StrengthAttributeWerte);
+
+// TrageZeitAttributeWerte comparator
+trageZeitAttributeWerteComparator = this.enumComparator(TrageZeitAttributeWerte);
+
+// Remarkability comparator
+remarkabilityComparator = this.enumComparator(Remarkability);
+
+// MutationChance comparator
+mutationChanceComparator = this.enumComparator(MutationChance);
+
+// YieldBonus comparator
+yieldBonusComparator = this.enumComparator(YieldBonus);
+
+// Example arrays of enum values
+strengthValues: StrengthAttributeWerte[] = [
+  StrengthAttributeWerte.Gigantisch,
+  StrengthAttributeWerte.Ausgezeichnet,
+  StrengthAttributeWerte.Stark,
+  StrengthAttributeWerte.Robust,
+  StrengthAttributeWerte.Normal,
+  StrengthAttributeWerte.Schwach
+];
+
+trageZeitValues: TrageZeitAttributeWerte[] = [
+  TrageZeitAttributeWerte.WurfMaschine,
+  TrageZeitAttributeWerte.Zügig,
+  TrageZeitAttributeWerte.Mittel,
+  TrageZeitAttributeWerte.Lang,
+  TrageZeitAttributeWerte.SehrLang,
+  TrageZeitAttributeWerte.ExtremLang
+];
+
+remarkabilityValues: Remarkability[] = [
+  Remarkability.Bemerkenswert,
+  Remarkability.Beeindruckend,
+  Remarkability.Attraktiv,
+  Remarkability.Durchschnittlich,
+  Remarkability.GehtSo,
+  Remarkability.Hässlich,
+];
+
+mutationChanceValues: MutationChance[] = [
+  MutationChance.SehrHoch,
+  MutationChance.Hoch,
+  MutationChance.Erhöht,
+  MutationChance.Durchschnittlich,
+  MutationChance.Gering,
+  MutationChance.Niedrig
+];
+
+yieldBonusValues: YieldBonus[] = [
+  YieldBonus.Unerreicht,
+  YieldBonus.Üppig,
+  YieldBonus.Ergiebig,
+  YieldBonus.Akzeptabel,
+  YieldBonus.Bescheiden,
+  YieldBonus.Spärlich
+];
+  
   
 
   colDefs = [
@@ -199,19 +277,22 @@ export class MainViewComponent implements OnInit {
       headerName: "Gestation Period",
       field: "nerfed.gestationPeriod.enumValue",
       filter: true,
+      comparator: this.trageZeitAttributeWerteComparator.bind(this),
     },
-    { headerName: "Stärke", field: "nerfed.strength.enumValue", maxWidth: 125, filter: true },
+    { headerName: "Stärke", field: "nerfed.strength.enumValue", maxWidth: 125, filter: true,     comparator: this.strengthAttributeWerteComparator.bind(this) },
     {
       headerName: "Remarkability",
       field: "nerfed.remarkability.enumValue",
       maxWidth: 125,
       filter: true,
+      comparator: this.remarkabilityComparator.bind(this),
     },
     {
       headerName: "Mutation Chance",
       field: "nerfed.mutationChance.enumValue",
       maxWidth: 130,
       filter: true,
+      comparator: this.mutationChanceComparator.bind(this),
     },
     { headerName: "Cycle Length", field: "species.cycleTime", maxWidth: 100, filter: true },
     // add button to select animal
