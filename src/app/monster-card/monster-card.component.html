@@ -1,86 +1,140 @@
-<div (click)="onMonsterClick()" [class.selected]="selectionService.isSelected(monster)" class="monster-card gap-2">
-    <div class="flex-grow">
+<div
+  (click)="onMonsterClick()"
+  [class.selected]="selectionService.isSelected(monster)"
+  class="monster-card gap-2"
+>
+  <div class="flex-grow">
     <div>
-        <img [src]="monster?.species?.image_url" alt="{{monster?.name}}" class="monster-image">
-        <h2>{{monster?.name}}</h2> <h2>{{monster?.species?.name}}</h2> <h2>{{monster?.gender}}</h2> <h2>{{monster?.tier}}</h2>
+      <img
+        [src]="monster?.species?.image_url"
+        alt="{{ monster?.name }}"
+        class="monster-image"
+      />
+      <h2>{{ monster?.name }}</h2>
+      <h2>{{ monster?.species?.name }}</h2>
+      <h2>{{ monster?.gender }}</h2>
+      <h2>{{ monster?.tier }}</h2>
     </div>
     <ng-container *ngIf="monster">
-        <app-evolution-stepper [monster]="monster"/>
+      <app-evolution-stepper [monster]="monster" />
     </ng-container>
+  </div>
+  <div class="attributes-grid flex-grow">
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon species"></span
+        ><span class="attribute">Species:</span>
+      </div>
+      <div>{{ monster?.species?.species }}</div>
     </div>
-    <div class="attributes-grid flex-grow">
-        <div class="attribute-item">
-            <div><span class="attribute-icon species"></span><span class="attribute">Species:</span></div>
-            <div>{{monster?.species?.species}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon home-planet"></span><span class="attribute">Home Planet:</span></div>
-            <div>{{monster?.species?.homePlanet}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon cycle-time"></span><span class="attribute">Cycle Time:</span></div>
-            <div>{{monster?.nerfed?.species?.cycleTime}} days</div>
-        </div>
-        <!-- <div class="attribute-item">
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon home-planet"></span
+        ><span class="attribute">Home Planet:</span>
+      </div>
+      <div>{{ monster?.species?.homePlanet }}</div>
+    </div>
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon cycle-time"></span
+        ><span class="attribute">Cycle Time:</span>
+      </div>
+      <div>{{ monster?.nerfed?.species?.cycleTime }} days</div>
+    </div>
+    <!-- <div class="attribute-item">
             <div><span class="attribute-icon description"></span><span class="attribute">Description:</span></div>
             <div>{{monster?.species?.description}}</div>
         </div> -->
-        <div class="attribute-item">
-            <div><span class="attribute-icon gestation-period"></span><span class="attribute">Gestation Period Bonus:</span></div>
-            <div>{{monster?.nerfed?.gestationPeriod?.enumValue}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon strength"></span><span class="attribute">Strength Bonus:</span></div>
-            <!-- <div>{{monster?.strength?.enumValue}}</div> -->
-            <div>{{monster?.nerfed?.strength?.enumValue}}</div>
-            <div>Würfel: {{monster?.nerfed?.strength?.value}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon remarkability"></span><span class="attribute">Remarkability Bonus:</span></div>
-            <div>{{monster?.nerfed?.remarkability?.enumValue}}</div>
-            <div>Würfel: {{monster?.nerfed?.remarkability?.value}}</div>
-        </div>
-        <div class="attribute-item">
-            <div><span class="attribute-icon mutation-chance"></span><span class="attribute">Mutation Chance Bonus:</span></div>
-            <div>{{monster?.nerfed?.mutationChance?.enumValue}}</div>
-            <div>Würfel: {{monster?.nerfed?.mutationChance?.value}}</div>
-        </div>
-        <div class="attribute-item">
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon gestation-period"></span
+        ><span class="attribute">Gestation Period Bonus:</span>
+      </div>
+      <div>{{ monster?.nerfed?.gestationPeriod?.enumValue }}</div>
+    </div>
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon strength"></span
+        ><span class="attribute">Strength Bonus:</span>
+      </div>
+      <!-- <div>{{monster?.strength?.enumValue}}</div> -->
+      <div>{{ monster?.nerfed?.strength?.enumValue }}</div>
+      <div>Würfel: {{ monster?.nerfed?.strength?.value }}</div>
+    </div>
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon remarkability"></span
+        ><span class="attribute">Remarkability Bonus:</span>
+      </div>
+      <div>{{ monster?.nerfed?.remarkability?.enumValue }}</div>
+      <div>Würfel: {{ monster?.nerfed?.remarkability?.value }}</div>
+    </div>
+    <div class="attribute-item">
+      <div>
+        <span class="attribute-icon mutation-chance"></span
+        ><span class="attribute">Mutation Chance Bonus:</span>
+      </div>
+      <div>{{ monster?.nerfed?.mutationChance?.enumValue }}</div>
+      <div>Würfel: {{ monster?.nerfed?.mutationChance?.value }}</div>
+    </div>
+    <!-- <div class="attribute-item">
             <div><span class="attribute-icon yield-bonus"></span><span class="attribute">Yield Bonus:</span></div>
             <div>{{monster?.yieldBonus?.enumValue}}</div>
             <div>Würfel: {{monster?.nerfed?.yieldBonus?.value}}</div>
-        </div>
-        <!-- <div class="attribute-item">
+        </div> -->
+    <!-- <div class="attribute-item">
             <div><span class="attribute-icon birth-timestamp"></span><span class="attribute">Birth Timestamp:</span></div>
         </div> -->
-        <button (click)="openSpeciesInfo($event)" class="toggle-species-info z-100 button button-secondary">Species Info</button>
-        <!-- Collapsible Section for Species Info -->
-        <div *ngIf="showSpeciesInfo" class="attributes-grid">
-            <div class="attribute-item">
-                <div><span class="attribute-icon species"></span><span class="attribute">Species:</span></div>
-                <div>{{monster?.species?.species}}</div>
-            </div>
-            <div class="attribute-item">
-                <div><span class="attribute-icon home-planet"></span><span class="attribute">Home Planet:</span></div>
-                <div>{{monster?.species?.homePlanet}}</div>
-            </div>
-            <div class="attribute-item">
-                <div><span class="attribute-icon cycle-time"></span><span class="attribute">Cycle Time:</span></div>
-                <div>{{monster?.species?.cycleTime}} days</div>
-            </div>
-            <div class="attribute-item">
-                <div><span class="attribute-icon description"></span><span class="attribute">Description:</span></div>
-                <div>{{monster?.species?.description}}</div>
-            </div>
+    <button
+      (click)="openSpeciesInfo($event)"
+      class="toggle-species-info z-100 button button-secondary"
+    >
+      Species Info
+    </button>
+    <!-- Collapsible Section for Species Info -->
+    <div *ngIf="showSpeciesInfo" class="attributes-grid">
+      <div class="attribute-item">
+        <div>
+          <span class="attribute-icon species"></span
+          ><span class="attribute">Species:</span>
         </div>
-        <!-- <p>{{monster?.evolutionStage}}</p> -->
-          <p *ngIf="monster">Done at {{ calculateTotalTime(monster.species.cycleTime! * MS_TO_DAYS, monster) }}</p>
+        <div>{{ monster?.species?.species }}</div>
+      </div>
+      <div class="attribute-item">
+        <div>
+          <span class="attribute-icon home-planet"></span
+          ><span class="attribute">Home Planet:</span>
+        </div>
+        <div>{{ monster?.species?.homePlanet }}</div>
+      </div>
+      <div class="attribute-item">
+        <div>
+          <span class="attribute-icon cycle-time"></span
+          ><span class="attribute">Cycle Time:</span>
+        </div>
+        <div>{{ monster?.species?.cycleTime }} days</div>
+      </div>
+      <div class="attribute-item">
+        <div>
+          <span class="attribute-icon description"></span
+          ><span class="attribute">Description:</span>
+        </div>
+        <div>{{ monster?.species?.description }}</div>
+      </div>
     </div>
-    <div *ngIf="showDataView" class="data-view">
-        <pre>{{monster | json}}</pre>
-    </div>
+    <!-- <p>{{monster?.evolutionStage}}</p> -->
+    <p *ngIf="monster">
+      Done at
+      {{ calculateTotalTime(monster.species.cycleTime! * MS_TO_DAYS, monster) }}
+    </p>
+  </div>
+  <div *ngIf="showDataView" class="data-view">
+    <pre>{{ monster | json }}</pre>
+  </div>
 </div>
 <div>
-    <div>Birth moment {{monster?.birthTimestamp  | date: 'medium'}}</div>
-    <button class="button button-danger" (click)="releaseMonster($event)">Release</button>
+  <div>Birth moment {{ monster?.birthTimestamp | date : "medium" }}</div>
+  <button class="button button-danger" (click)="releaseMonster($event)">
+    Release
+  </button>
 </div>

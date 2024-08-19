@@ -4,6 +4,7 @@ import {
   MutationChanceAttributeValues,
   TrageZeitAttributeValue,
   YieldBonusAttributeValues,
+  YieldBonus,
 } from "../AttributeConfig";
 import { v4 as uuidv4 } from "uuid";
 import { randSuperheroName } from "@ngneat/falso";
@@ -164,7 +165,7 @@ function generateNewMonster(): DnDMonster {
     gestationPeriod: selectAttributeValue(TrageZeitAttributeValue),
     cycleTime: species.cycleTime,
     // @ts-ignore
-    yieldBonus: selectAttributeValue(YieldBonusAttributeValues),
+    yieldBonus: YieldBonus.Spärlich
     // @ts-ignore
     gender: Gender[Math.floor(Math.random() * 2) as 0 | 1],
   };
