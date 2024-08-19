@@ -9,12 +9,24 @@ import { BreedingPodListComponent } from "../../app/breeding-pod-list/breeding-p
 import { MonsterCardComponent } from "../../app/monster-card/monster-card.component";
 import MonsterData from "../resources/monsters.json";
 import { SupabaseService } from "../supabase.service";
-import { DnDMonster, EvolutionStage, MutationChance, Remarkability, StrengthAttributeWerte, TrageZeitAttributeWerte, YieldBonus } from "../../types";
+import {
+  DnDMonster,
+  EvolutionStage,
+  MutationChance,
+  Remarkability,
+  StrengthAttributeWerte,
+  TrageZeitAttributeWerte,
+  YieldBonus,
+} from "../../types";
 import { AgGridAngular } from "ag-grid-angular";
 import { MonsterSelectionService } from "../service/monster-selection-service/monster-selection-service.service";
 import { ICellRendererAngularComp } from "ag-grid-angular";
 import { ICellRendererParams } from "ag-grid-community";
 import { BreedingServiceService } from "../breeding-service.service";
+import {
+  calcMonsterTier,
+  evolutionStageNerfed,
+} from "../helpers/generateNewMonster";
 
 @Component({
   standalone: true,
@@ -150,22 +162,40 @@ export class MainViewComponent implements OnInit {
   ) {}
 
   rankingsOrder = [
-    'A+', 'A', 'A-', 
-    'B+', 'B', 'B-', 
-    'C+', 'C', 'C-', 
-    'D+', 'D', 'D-', 
-    'E+', 'E', 'E-', 
-    'F+', 'F', 'F-'
+    "A+",
+    "A",
+    "A-",
+    "B+",
+    "B",
+    "B-",
+    "C+",
+    "C",
+    "C-",
+    "D+",
+    "D",
+    "D-",
+    "E+",
+    "E",
+    "E-",
+    "F+",
+    "F",
+    "F-",
   ];
 
-  rankingComparator(valueA: string, valueB: string, nodeA: any, nodeB: any, isDescending: boolean): number {
+  rankingComparator(
+    valueA: string,
+    valueB: string,
+    nodeA: any,
+    nodeB: any,
+    isDescending: boolean
+  ): number {
     const indexA = this.rankingsOrder.indexOf(valueA);
     const indexB = this.rankingsOrder.indexOf(valueB);
-  
+
     if (indexA === -1 || indexB === -1) {
-      throw new Error('Ranking not found in the predefined order');
+      throw new Error("Ranking not found in the predefined order");
     }
-  
+
     return indexA - indexB;
   }
 
@@ -186,67 +216,69 @@ export class MainViewComponent implements OnInit {
     };
   }
   // StrengthAttributeWerte comparator
-strengthAttributeWerteComparator = this.enumComparator(StrengthAttributeWerte);
+  strengthAttributeWerteComparator = this.enumComparator(
+    StrengthAttributeWerte
+  );
 
-// TrageZeitAttributeWerte comparator
-trageZeitAttributeWerteComparator = this.enumComparator(TrageZeitAttributeWerte);
+  // TrageZeitAttributeWerte comparator
+  trageZeitAttributeWerteComparator = this.enumComparator(
+    TrageZeitAttributeWerte
+  );
 
-// Remarkability comparator
-remarkabilityComparator = this.enumComparator(Remarkability);
+  // Remarkability comparator
+  remarkabilityComparator = this.enumComparator(Remarkability);
 
-// MutationChance comparator
-mutationChanceComparator = this.enumComparator(MutationChance);
+  // MutationChance comparator
+  mutationChanceComparator = this.enumComparator(MutationChance);
 
-// YieldBonus comparator
-yieldBonusComparator = this.enumComparator(YieldBonus);
+  // YieldBonus comparator
+  yieldBonusComparator = this.enumComparator(YieldBonus);
 
-// Example arrays of enum values
-strengthValues: StrengthAttributeWerte[] = [
-  StrengthAttributeWerte.Gigantisch,
-  StrengthAttributeWerte.Ausgezeichnet,
-  StrengthAttributeWerte.Stark,
-  StrengthAttributeWerte.Robust,
-  StrengthAttributeWerte.Normal,
-  StrengthAttributeWerte.Schwach
-];
+  // Example arrays of enum values
+  strengthValues: StrengthAttributeWerte[] = [
+    StrengthAttributeWerte.Gigantisch,
+    StrengthAttributeWerte.Ausgezeichnet,
+    StrengthAttributeWerte.Stark,
+    StrengthAttributeWerte.Robust,
+    StrengthAttributeWerte.Normal,
+    StrengthAttributeWerte.Schwach,
+  ];
 
-trageZeitValues: TrageZeitAttributeWerte[] = [
-  TrageZeitAttributeWerte.WurfMaschine,
-  TrageZeitAttributeWerte.Zügig,
-  TrageZeitAttributeWerte.Mittel,
-  TrageZeitAttributeWerte.Lang,
-  TrageZeitAttributeWerte.SehrLang,
-  TrageZeitAttributeWerte.ExtremLang
-];
+  trageZeitValues: TrageZeitAttributeWerte[] = [
+    TrageZeitAttributeWerte.WurfMaschine,
+    TrageZeitAttributeWerte.Zügig,
+    TrageZeitAttributeWerte.Mittel,
+    TrageZeitAttributeWerte.Lang,
+    TrageZeitAttributeWerte.SehrLang,
+    TrageZeitAttributeWerte.ExtremLang,
+  ];
 
-remarkabilityValues: Remarkability[] = [
-  Remarkability.Bemerkenswert,
-  Remarkability.Beeindruckend,
-  Remarkability.Attraktiv,
-  Remarkability.Durchschnittlich,
-  Remarkability.GehtSo,
-  Remarkability.Hässlich,
-];
+  remarkabilityValues: Remarkability[] = [
+    Remarkability.Bemerkenswert,
+    Remarkability.Beeindruckend,
+    Remarkability.Attraktiv,
+    Remarkability.Durchschnittlich,
+    Remarkability.GehtSo,
+    Remarkability.Hässlich,
+  ];
 
-mutationChanceValues: MutationChance[] = [
-  MutationChance.SehrHoch,
-  MutationChance.Hoch,
-  MutationChance.Erhöht,
-  MutationChance.Durchschnittlich,
-  MutationChance.Gering,
-  MutationChance.Niedrig
-];
+  mutationChanceValues: MutationChance[] = [
+    MutationChance.SehrHoch,
+    MutationChance.Hoch,
+    MutationChance.Erhöht,
+    MutationChance.Durchschnittlich,
+    MutationChance.Gering,
+    MutationChance.Niedrig,
+  ];
 
-yieldBonusValues: YieldBonus[] = [
-  YieldBonus.Unerreicht,
-  YieldBonus.Üppig,
-  YieldBonus.Ergiebig,
-  YieldBonus.Akzeptabel,
-  YieldBonus.Bescheiden,
-  YieldBonus.Spärlich
-];
-  
-  
+  yieldBonusValues: YieldBonus[] = [
+    YieldBonus.Unerreicht,
+    YieldBonus.Üppig,
+    YieldBonus.Ergiebig,
+    YieldBonus.Akzeptabel,
+    YieldBonus.Bescheiden,
+    YieldBonus.Spärlich,
+  ];
 
   colDefs = [
     {
@@ -267,19 +299,31 @@ yieldBonusValues: YieldBonus[] = [
     },
     { headerName: "Name", field: "name", filter: true },
     { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
-    // @ts-ignore
-    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true,  
-      comparator: this.rankingComparator.bind(this)    
+    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true },
+    {
+      headerName: "Species",
+      field: "species.name",
+      maxWidth: 150,
+      filter: true,
     },
-    { headerName: "Species", field: "species.name", maxWidth: 150, filter: true },
-    { headerName: "Stage", field: "evolutionStage", maxWidth: 75, filter: true },
+    {
+      headerName: "Stage",
+      field: "evolutionStage",
+      maxWidth: 75,
+      filter: true,
+    },
     {
       headerName: "Gestation Period",
       field: "nerfed.gestationPeriod.enumValue",
       filter: true,
       comparator: this.trageZeitAttributeWerteComparator.bind(this),
     },
-    { headerName: "Stärke", field: "nerfed.strength.enumValue", maxWidth: 125, filter: true,     comparator: this.strengthAttributeWerteComparator.bind(this) },
+    {
+      headerName: "Stärke",
+      field: "nerfed.strength.enumValue",
+      maxWidth: 125,
+      filter: true,
+    },
     {
       headerName: "Remarkability",
       field: "nerfed.remarkability.enumValue",
@@ -294,7 +338,12 @@ yieldBonusValues: YieldBonus[] = [
       filter: true,
       comparator: this.mutationChanceComparator.bind(this),
     },
-    { headerName: "Cycle Length", field: "species.cycleTime", maxWidth: 100, filter: true },
+    {
+      headerName: "Cycle Length",
+      field: "species.cycleTime",
+      maxWidth: 100,
+      filter: true,
+    },
     // add button to select animal
   ];
 
@@ -357,12 +406,46 @@ yieldBonusValues: YieldBonus[] = [
   async loadFromSupabase() {
     if (confirm("Are you sure you want to load the last save?")) {
       const data = await this.supabase.loadLastSave();
-      console.log("Data:", data);
+      const animalData = data?.animalData.map((animal: any) => {
+        animal.species.image_url = MonsterData.find((monster) => {
+          return monster.species === animal.species.species;
+        })?.image_url;
+
+        animal.tier = calcMonsterTier(animal as DnDMonster);
+        animal.nerfed = evolutionStageNerfed(animal as DnDMonster);
+        return {
+          ...animal,
+        };
+      });
+
+      const podsData = data?.podsData.map((pod: any) => {
+        return {
+          ...pod,
+          parents: pod.parents.map((parent: any) => {
+            return {
+              ...parent,
+              species: MonsterData.find((monster) => {
+                return monster.species === parent.species.species;
+              }),
+            };
+          }),
+          offspring: pod.offspring.map((offspring: any) => {
+            return {
+              ...offspring,
+              species: MonsterData.find((monster) => {
+                return monster.species === offspring.species.species;
+              }),
+            };
+          }),
+        };
+      });
+
+      console.debug("Data:", data);
       // @ts-ignore
-      this.animalService.animalsSubject.next(data?.animalData);
-      this.animalService.reinitIndexDB(data?.animalData);
+      this.animalService.animalsSubject.next(animalData);
+      this.animalService.reinitIndexDB(animalData);
       // @ts-ignore
-      this.breedingService.restoreSavedData(data?.podsData);
+      this.breedingService.restoreSavedData(podsData);
 
       this.cdr.detectChanges(); // Manually trigger change detection
     }

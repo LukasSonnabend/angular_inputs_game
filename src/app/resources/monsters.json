@@ -5,7 +5,7 @@
     "homeworld": "Naboo",
     "cycleTime": 6,
     "image_url": "https://static.wikia.nocookie.net/starwars/images/b/b2/Colo_claw_fish.png",
-    "growthStages": [0,1,2],
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": 4000,
     "baseSalePrice": 4000,
     "enclosureCost": 0
@@ -15,8 +15,8 @@
     "name": "Bantha",
     "homeworld": "Tatooine",
     "cycleTime": 5,
-    "image_url":"https://static.wikia.nocookie.net/starwars/images/a/aa/Bantha-SWCT.png",
-    "growthStages": [0,1,2],
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/a/aa/Bantha-SWCT.png",
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": "1 L Milch / 1 Tag\n1 Bantha Fell/ 7 Tage",
     "baseSalePrice": 1000,
     "enclosureCost": 0
@@ -26,8 +26,8 @@
     "name": "Dewback",
     "homeworld": "Tatooine",
     "cycleTime": 6,
-    "image_url":"https://static.wikia.nocookie.net/starwars/images/8/84/Dewback-SS.png",
-    "growthStages": [0,1,2],
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/8/84/Dewback-SS.png",
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": 2000,
     "baseSalePrice": 2000,
     "enclosureCost": 0
@@ -37,7 +37,7 @@
     "name": "Woodoo",
     "homeworld": "Tatooine",
     "cycleTime": 3,
-    "image_url": "https://static.wikia.nocookie.net/starwars/images/9/93/Woodoo2-woswfg.jpg", 
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/9/93/Woodoo2-woswfg.jpg",
     "growthStages": [-1, 0, 1, 2],
     "standardYieldPerLargeAnimal": 800,
     "baseSalePrice": 800,
@@ -60,7 +60,7 @@
     "homeworld": "Tatooine",
     "image_url": "https://static.wikia.nocookie.net/starwars/images/b/bb/Sketto-woswfg.jpg",
     "cycleTime": 2,
-    "growthStages": [-1,2],
+    "growthStages": [-1, 2],
     "standardYieldPerLargeAnimal": "1 Sketto Schwarm Haut/4 Tag",
     "baseSalePrice": 10,
     "enclosureCost": 0
@@ -71,7 +71,7 @@
     "homeworld": "Dagobah",
     "image_url": "https://static.wikia.nocookie.net/starwars/images/5/58/Ruping_SoT.png",
     "cycleTime": 6,
-    "growthStages": [0,1,2],
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": 2000,
     "baseSalePrice": 2000,
     "enclosureCost": 0
@@ -80,9 +80,9 @@
     "species": "Spot light Sloth",
     "name": "Spot light Sloth",
     "homeworld": "Dagobah",
-    "image_url": "https://www.starwars-holonet.com/holonet/dictionnaire/photos/crea_paresseux_lumineux.jpg", 
+    "image_url": "/assets/spotlight_sloth.png",
     "cycleTime": 5,
-    "growthStages": [0,1,2],
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": 1500,
     "baseSalePrice": 1500,
     "enclosureCost": 0
@@ -93,9 +93,49 @@
     "homeworld": "Dagobah",
     "image_url": "https://static.wikia.nocookie.net/starwars/images/b/ba/KnobbyWhiteSpider-wswfg.jpg",
     "cycleTime": 6,
-    "growthStages": [0,1,2],
+    "growthStages": [0, 1, 2],
     "standardYieldPerLargeAnimal": "5m Spinnenseil/ Tag",
     "baseSalePrice": 3500,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Anooba",
+    "name": "Anooba",
+    "homeworld": "Tatooine",
+    "image_url": "/assets/anooba.png",
+    "cycleTime": 4,
+    "growthStages": [0, 1, 2],
+    "baseSalePrice": 1000,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Nharpira",
+    "name": "Nharpira",
+    "homeworld": "Dagobah",
+    "image_url": "/assets/nharpira.png",
+    "cycleTime": 6,
+    "growthStages": [-1, 2],
+    "baseSalePrice": 200,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Morp",
+    "name": "Morp",
+    "homeworld": "Dagobah",
+    "image_url": "/assets/morp.png",
+    "cycleTime": 5,
+    "growthStages": [-1, 2],
+    "baseSalePrice": 200,
+    "enclosureCost": 0
+  },
+  {
+    "species": "Giant Swamp Slug",
+    "name": "Giant Swamp Slug",
+    "homeworld": "Dagobah",
+    "image_url": "/assets/giant_swamp_slug.png",
+    "cycleTime": 4,
+    "growthStages": [-1, 0, 1, 2],
+    "baseSalePrice": 1500,
     "enclosureCost": 0
   }
 ]

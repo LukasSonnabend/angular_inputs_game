@@ -1,34 +1,63 @@
 <div class="pod-container">
   <div class="inner-border">
-    <p>Pod ID: {{pod.uuid}}</p>
+    <p>Species: {{ parentSpecies }}</p>
+    <!-- <p>Pod ID: {{pod.uuid}}</p> -->
     <!-- Displaying parents' images and names -->
     <div class="flex justify-around">
-        <div *ngFor="let parent of pod.parents">
-            <img [src]="parent.species.image_url" alt="{{parent.species.name}}" class="rounded-full h-50 w-50 object-fit overflow-clip">
-            <p>Name: {{parent.name}}</p>
-        </div>
+      <div *ngFor="let parent of pod.parents">
+        <img
+          [src]="parent.species.image_url"
+          alt="{{ parent.species.name }}"
+          class="rounded-full h-50 w-50 object-fit overflow-clip w-[100px] h-[100px] md:w-[200px] md:h-[200px]"
+        />
+        <p>Name: {{ parent.name }}</p>
+      </div>
     </div>
-   <!-- {{stringiedPod}} -->
+    <!-- {{stringiedPod}} -->
     <!-- <p>Offspring: {{pod.offspring.length}}</p> -->
     <ng-container *ngIf="pod.offspring.length > 0; else elseContainer">
       <div *ngFor="let offspring of pod.offspring">
         <div class="flex justify-around">
           <div>
-            <img [src]="offspring.species.image_url" alt="{{offspring.species.name}}" class="rounded-full h-32 w-32 object-fit overflow-clip">
-            <h2>{{offspring?.name}}</h2> <h2>{{offspring?.species?.name}}</h2> <h2>{{getGenderString(offspring?.gender)}}</h2>
-            <p>Name: {{offspring.name}}</p>
-        </div>
+            <img
+              [src]="offspring.species.image_url"
+              alt="{{ offspring.species.name }}"
+              class="rounded-full h-32 w-32 object-fit overflow-clip"
+            />
+            <h2>{{ offspring?.name }}</h2>
+            <h2>{{ offspring?.species?.name }}</h2>
+            <h2>{{ getGenderString(offspring?.gender) }}</h2>
+            <p>Name: {{ offspring.name }}</p>
+          </div>
         </div>
       </div>
-      <button class="button button-primary" (click)="breedService.claimOffspring(pod.uuid)">Claim Offspring</button>
+      <button
+        class="button button-primary"
+        (click)="breedService.claimOffspring(pod.uuid)"
+      >
+        Claim Offspring
+      </button>
     </ng-container>
     <ng-template #elseContainer>
-      <button class="button button-primary z-100" (click)="breedService.breakBreedingPod(pod.uuid)">Stop breeding</button>
-      <p>Time to Hatch: {{pod.countDown | Round:0:Direction.UP}} seconds</p>
-      <p>Done at {{calculateTotalTime(pod.breedingStartDateTime, (pod.timeToHatch))}}</p>
+      <button
+        class="button button-primary z-100"
+        (click)="breedService.breakBreedingPod(pod.uuid)"
+      >
+        Stop breeding
+      </button>
+      <p>
+        Time to Hatch: {{ pod.countDown | Round : 0 : Direction.UP }} seconds
+      </p>
+      <p>
+        Done at
+        {{ calculateTotalTime(pod.breedingStartDateTime, pod.timeToHatch) }}
+      </p>
       <!-- Progress Bar -->
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-        <div class="bg-blue-600 h-2.5 rounded-full" [style.width]="getBreedingProgress() + '%'"></div>
+        <div
+          class="bg-blue-600 h-2.5 rounded-full"
+          [style.width]="getBreedingProgress() + '%'"
+        ></div>
       </div>
     </ng-template>
   </div>

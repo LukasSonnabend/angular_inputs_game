@@ -5,6 +5,7 @@ import { BreedingPod, DnDMonster } from "../types"; // Assuming BreedingPod is c
 import { AnimalService } from "./animal-service.service";
 import { genOffspring } from "./helpers/generateOffspring";
 import { MS_TO_DAYS } from "../util";
+import { evolutionStageNerfed } from "./helpers/generateNewMonster";
 
 @Injectable({
   providedIn: "root",
@@ -25,14 +26,13 @@ export class BreedingServiceService {
   }
 
   public restoreSavedData(data: BreedingPod[]) {
-    let dateParsed = data.map(pod => {
+    let dateParsed = data.map((pod) => {
       return {
         ...pod,
-        breedingStartDateTime: new Date(pod.breedingStartDateTime)
-      }
-    })
+        breedingStartDateTime: new Date(pod.breedingStartDateTime),
+      };
+    });
 
-    
     this.breedingPodsSubject.next(dateParsed);
     this.savePodsToLocalStorage();
   }
@@ -111,6 +111,7 @@ export class BreedingServiceService {
     // Create the offspring object
 
     const a = genOffspring(pod.parents[0], pod.parents[1]) as DnDMonster; // Assuming combineInputsAndAddNew is a function that combines two monsters into a new one
+    a.nerfed = evolutionStageNerfed(a as DnDMonster);
 
     // Update the passed pod's offspring array directly
     const updatedPod = { ...pod, offspring: [...pod.offspring, a] };

@@ -26,11 +26,14 @@
             }
           },
           "options": {
-            "assets": [{
-              "glob": "_redirects",
-              "input": "src",
-              "output": "/"
-            }],
+            "assets": [
+              {
+                "glob": "_redirects",
+                "input": "src",
+                "output": "/"
+              },
+              "src/assets"
+            ],
             "index": "src/index.html",
             "browser": "src/main.ts",
             "outputPath": "dist/demo",
