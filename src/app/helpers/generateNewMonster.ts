@@ -165,7 +165,7 @@ function generateNewMonster(): DnDMonster {
     gestationPeriod: selectAttributeValue(TrageZeitAttributeValue),
     cycleTime: species.cycleTime,
     // @ts-ignore
-    yieldBonus: YieldBonus.Spärlich
+    yieldBonus: YieldBonus.Spärlich,
     // @ts-ignore
     gender: Gender[Math.floor(Math.random() * 2) as 0 | 1],
   };
