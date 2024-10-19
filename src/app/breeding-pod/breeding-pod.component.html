@@ -46,7 +46,8 @@
         Stop breeding
       </button>
       <p>
-        Time to Hatch: {{ pod.countDown | Round : 0 : Direction.UP }} seconds
+        Time to Hatch:
+        {{ (pod.countDown ?? 0) / 60 | Round : 0 : Direction.UP }} minutes
       </p>
       <p>
         Done at

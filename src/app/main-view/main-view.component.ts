@@ -162,6 +162,9 @@ export class MainViewComponent implements OnInit {
   ) {}
 
   rankingsOrder = [
+    "S+",
+    "S",
+    "S-",
     "A+",
     "A",
     "A-",
@@ -193,10 +196,11 @@ export class MainViewComponent implements OnInit {
     const indexB = this.rankingsOrder.indexOf(valueB);
 
     if (indexA === -1 || indexB === -1) {
+      console.log(`${valueA} or ${valueB} not found in the predefined order`);
       throw new Error("Ranking not found in the predefined order");
     }
 
-    return indexA - indexB;
+    return indexB - indexA;
   }
 
   createEnumMapping<T>(enumObj: T): { [key: string]: number } {
@@ -299,7 +303,13 @@ export class MainViewComponent implements OnInit {
     },
     { headerName: "Name", field: "name", filter: true },
     { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
-    { headerName: "Rating", field: "tier", maxWidth: 75, filter: true },
+    {
+      headerName: "Rating",
+      field: "tier",
+      maxWidth: 75,
+      filter: true,
+      comparator: this.rankingComparator.bind(this),
+    },
     {
       headerName: "Species",
       field: "species.name",
