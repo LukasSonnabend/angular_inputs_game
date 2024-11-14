@@ -138,4 +138,56 @@
     "baseSalePrice": 1500,
     "enclosureCost": 0
   }
+  {
+    "species": "Varactyle",
+    "name": "Varactyle",
+    "homeworld": "Utapau",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/7/79/Varactyl_DK.png",
+    "cycleTime": 4,
+    "growthStages": [-1, 0, 1, 2],
+    "baseSalePrice": 2000,
+    "enclosureCost": 0
+  }
+  {
+    "species": "Dactillion",
+    "name": "Dactillion",
+    "homeworld": "Utapau",
+    "image_url": "https://static.wikia.nocookie.net/starwars/images/9/93/Dactillion-SWBC68.png",
+    "cycleTime": 5,
+    "growthStages": [-1, 0, 1, 2],
+    "baseSalePrice": 2000,
+    "enclosureCost": 0
+  }
+  {
+    "species": "Ginntho",
+    "name": "Ginntho",
+    "homeworld": "Utapau",
+    "image_url": "https://static.wikia.nocookie.net/jedipedia/images/5/58/Ginntho.jpg/revision/latest?cb=20070402085924&path-prefix=de",
+    "cycleTime": 2,
+    "growthStages": [-1, 0, 1, 2],
+    "baseSalePrice": 1000,
+    "enclosureCost": 0
+  }
+  {
+    "species": "Nos-Monster",
+    "name": "Nos-Monster",
+    "homeworld": "Utapau",
+    "image_url": "https://static.wikia.nocookie.net/jedipedia/images/b/b0/Nos-Monster.jpg/revision/latest?cb=20070326154639&path-prefix=de",
+    "cycleTime": 8,
+    "growthStages": [0, 1, 2],
+    "baseSalePrice": 3200,
+    "enclosureCost": 0
+  }
+  {
+    "species": "Skura",
+    "name": "Skura",
+    "homeworld": "Utapau",
+    "image_url": "https://static.wikia.nocookie.net/jedipedia/images/b/b0/Nos-Monster.jpg/revision/latest?cb=20070326154639&path-prefix=de",
+    "cycleTime": 1,
+    "growthStages": [-1, 2],
+    "baseSalePrice": 100,
+    "enclosureCost": 
+  }
+
+
 ]
