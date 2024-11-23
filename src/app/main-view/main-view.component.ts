@@ -27,6 +27,8 @@ import {
   calcMonsterTier,
   evolutionStageNerfed,
 } from "../helpers/generateNewMonster";
+import { SpeciesFilter } from "../filters/species.filter";
+import { StageFilter } from "../filters/stage.filter";
 
 @Component({
   standalone: true,
@@ -70,53 +72,12 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
           </button>
         </div>
       </div>
-      <div>
-        <form ngForm>
-          <label>
-            Species:
-            <select
-              [(ngModel)]="selectedSpecies"
-              (change)="filterAnimals()"
-              name="species"
-            >
-              <option value="">All</option>
-              <!-- Add an option for each species -->
-              <option
-                *ngFor="let species of availableMonstersAsOptions()"
-                [value]="species.value"
-              >
-                {{ species.label }}
-              </option>
-              <!-- etc. -->
-            </select>
-          </label>
-          <label>
-            Growth Stage:
-            <select
-              [(ngModel)]="selectedGrowthStage"
-              (change)="filterAnimals()"
-              name="growthStage"
-            >
-              <option value="">All</option>
-              <!-- Add an option for each growth stage -->
-              <option *ngFor="let stage of evolutionStages" [value]="stage">
-                {{ stage }}
-              </option>
-              <!-- etc. -->
-            </select>
-          </label>
-        </form>
-      </div>
-      <button (click)="previousPage()" class="button button-primary">
-        Previous page
-      </button>
-      <button (click)="nextPage()">Next page</button>
-
-      <div class="ag-theme-balham">
+      <div class="ag-theme-balham my-2">
         <ag-grid-angular
           style="height: 500px; width: 100%;"
           class="ag-theme-balham-dark"
-          [rowData]="filteredAnimals"
+          [pagination]="true"
+          [rowData]="animals"
           [columnDefs]="colDefs"
         >
         </ag-grid-angular>
@@ -312,15 +273,15 @@ export class MainViewComponent implements OnInit {
     },
     {
       headerName: "Species",
+      filter: SpeciesFilter,
       field: "species.name",
       maxWidth: 150,
-      filter: true,
     },
     {
       headerName: "Stage",
       field: "evolutionStage",
       maxWidth: 75,
-      filter: true,
+      filter: StageFilter,
     },
     {
       headerName: "Gestation Period",
