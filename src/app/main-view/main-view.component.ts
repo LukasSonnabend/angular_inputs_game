@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, computed, OnInit } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import "zone.js";
 import { AnimalFormComponent } from "../../app/animal-form/animal-form.component";
@@ -62,6 +62,7 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
   standalone: true,
   template: `
     <div class="star-wars-theme">
+      <span>Total Value: {{ totalValue }}</span>
       <div class="flex justify-end">
         <div class="flex gap-10">
           <button class="button button-primary" (click)="saveToSupabase()">
@@ -77,24 +78,18 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
           style="height: 500px; width: 100%;"
           class="ag-theme-balham-dark"
           [pagination]="true"
-          [rowData]="animals"
+          [rowData]="filteredAnimals"
           [columnDefs]="colDefs"
         >
         </ag-grid-angular>
       </div>
       <app-animal-form />
       <app-breeding-pod-list />
-      <!-- other elements... -->
-      <!-- <div *ngIf="filteredAnimals.length > 0" class="flex flex-col gap-5">
-    <app-monster-card *ngFor="let beast of filteredAnimals" [monster]="beast"></app-monster-card>
-    </div> -->
     </div>
   `,
   imports: [
     AnimalFormComponent,
-    AttributeInputComponent,
     CommonModule,
-    MonsterCardComponent,
     BreedingPodListComponent,
     FormsModule,
     ReactiveFormsModule,
@@ -328,40 +323,40 @@ export class MainViewComponent implements OnInit {
   deleteAnimal(uuid: string): void {
     this.animalService.deleteAnimal(uuid);
   }
-  availableMonstersAsOptions(): any[] {
-    return this.availableMonsters.map((monster) => {
-      return { value: monster.species, label: monster.species };
+  gradeMap: Record<string, any> = {
+    S: { pointsRange1: [38, 40], pointsRange2: [46, 48], multiplier: 9 },
+    "A+": { pointsRange1: [34, 37], pointsRange2: [41, 45], multiplier: 3.5 },
+    A: { pointsRange1: [31, 33], pointsRange2: [37, 40], multiplier: 2.5 },
+    "A-": { pointsRange1: [27, 30], pointsRange2: [32, 36], multiplier: 2 },
+    "B+": { pointsRange1: [24, 26], pointsRange2: [29, 31], multiplier: 1.8 },
+    B: { pointsRange1: [21, 23], pointsRange2: [25, 28], multiplier: 1.2 },
+    "B-": { pointsRange1: [17, 20], pointsRange2: [20, 24], multiplier: 1 },
+    "C+": { pointsRange1: [13, 16], pointsRange2: [16, 19], multiplier: 0.8 },
+    C: { pointsRange1: [10, 12], pointsRange2: [12, 15], multiplier: 0.4 },
+    D: { pointsRange1: [4, 9], pointsRange2: [5, 11], multiplier: 0.2 },
+    F: { pointsRange1: [0, 3], pointsRange2: [0, 4], multiplier: 0 },
+  };
+  totalValue = "";
+
+  setTotalValue() {
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
     });
+
+    this.totalValue = formatter
+      .format(
+        this.animals.reduce((acc, animal) => {
+          // @ts-ignore
+          return (
+            acc + animal.baseSalePrice * this.gradeMap[animal.tier].multiplier
+          );
+        }, 0)
+      )
+      .replace("$", "₡"); // Replace $ with ₡ for Star Wars credits
   }
 
-  filterAnimals(): void {
-    const allFilteredAnimals = this.animals.filter((animal) => {
-      return (
-        (this.selectedSpecies === "" ||
-          animal.species.name === this.selectedSpecies) &&
-        (this.selectedGrowthStage === "" ||
-          animal.evolutionStage === this.selectedGrowthStage)
-      );
-    });
-
-    // Slice the array to get only the animals for the current page
-    this.filteredAnimals = allFilteredAnimals.slice(
-      this.pageIndex * this.pageSize,
-      (this.pageIndex + 1) * this.pageSize
-    );
-  }
-
-  nextPage(): void {
-    this.pageIndex++;
-    this.filterAnimals();
-  }
-
-  previousPage(): void {
-    if (this.pageIndex > 0) {
-      this.pageIndex--;
-      this.filterAnimals();
-    }
-  }
   saveToSupabase() {
     if (confirm("Are you sure you want to save the current state?")) {
       // save the data from the animal service to supabase
@@ -421,7 +416,7 @@ export class MainViewComponent implements OnInit {
       this.cdr.detectChanges(); // Manually trigger change detection
     }
   }
-
+  totalWorth = 0;
   ngOnInit(): void {
     // @ts-ignore
     this.supabase.authChanges((_, session) => (this.session = session));
@@ -429,7 +424,7 @@ export class MainViewComponent implements OnInit {
     this.animalService.animals$.subscribe(
       (animals) => {
         this.animals = animals;
-        // console.log('Loaded animals:', animals);
+        this.setTotalValue();
       },
       (error) => {
         console.error("Failed to load animals:", error);
