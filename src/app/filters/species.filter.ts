@@ -18,18 +18,6 @@ import { CommonModule } from "@angular/common";
         placeholder="Search species"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       />
-      <ul
-        *ngIf="filteredOptions.length > 0"
-        class="bg-white border border-gray-300 rounded-lg mt-2"
-      >
-        <li
-          *ngFor="let option of filteredOptions"
-          (click)="selectOption(option)"
-          class="p-2 cursor-pointer hover:bg-gray-200"
-        >
-          {{ option }}
-        </li>
-      </ul>
     </div>
   `,
 })
