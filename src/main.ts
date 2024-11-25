@@ -21,7 +21,12 @@ import { provideAnimations } from "@angular/platform-browser/animations";
   selector: "app-root",
   standalone: true,
   template: `
-    <div class="star-wars-theme">
+    <div
+      class="star-wars-theme"
+      style="display: grid;
+grid-template-columns: auto;
+grid-template-rows: 30px 0px calc(100vh - 30px);"
+    >
       <h1>Ruk´s Animal Hoe</h1>
       <router-outlet></router-outlet>
       <!-- This is where the routed components will be displayed -->

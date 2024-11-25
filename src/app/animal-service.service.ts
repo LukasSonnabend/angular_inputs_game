@@ -165,7 +165,7 @@ export class AnimalService {
     }
   }
 
-private initializeFilteredAnimals() {
+  private initializeFilteredAnimals() {
     combineLatest([
       this.animals$,
       this.selectionService.getSelectedMonstersObservable(),
@@ -177,11 +177,13 @@ private initializeFilteredAnimals() {
         (monster) => monster.uuid
       );
       // Ensure animals is an array before filtering
-      const filtered = Array.isArray(animals) ? animals.filter(
-        (animal) =>
-          !selectedMonsterUUIDs.includes(animal.uuid) && // Check against UUIDs for selected monsters
-          !breedingMonsters.find((m) => m.uuid === animal.uuid)
-      ) : []; // If animals is not an array, return an empty array
+      const filtered = Array.isArray(animals)
+        ? animals.filter(
+            (animal) =>
+              !selectedMonsterUUIDs.includes(animal.uuid) && // Check against UUIDs for selected monsters
+              !breedingMonsters.find((m) => m.uuid === animal.uuid)
+          )
+        : []; // If animals is not an array, return an empty array
       this.filteredAnimalsSubject.next(filtered);
     });
   }

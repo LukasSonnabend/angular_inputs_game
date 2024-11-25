@@ -29,6 +29,11 @@ import {
 } from "../helpers/generateNewMonster";
 import { SpeciesFilter } from "../filters/species.filter";
 import { StageFilter } from "../filters/stage.filter";
+import { StrengthAttributeWerteFilter } from "../filters/strength.filter";
+import { RemarkabilityFilter } from "../filters/remarkability.filter";
+import { RankingFilter } from "../filters/ranking.filter";
+import { MutationChanceFilter } from "../filters/mutationchance.filter";
+import { GestationPeriodFilter } from "../filters/gestation-period.filter";
 
 @Component({
   standalone: true,
@@ -61,7 +66,7 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
   selector: "app-root",
   standalone: true,
   template: `
-    <div class="star-wars-theme">
+    <div class="star-wars-theme h-screen flex flex-col">
       <span>Total Value: {{ totalValue }}</span>
       <div class="flex justify-end">
         <div class="flex gap-10">
@@ -73,18 +78,25 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
           </button>
         </div>
       </div>
-      <div class="ag-theme-balham my-2">
-        <ag-grid-angular
-          style="height: 500px; width: 100%;"
-          class="ag-theme-balham-dark"
-          [pagination]="true"
-          [rowData]="filteredAnimals"
-          [columnDefs]="colDefs"
-        >
-        </ag-grid-angular>
+      <div
+        class="grid"
+        style="grid-template-columns: 3fr 1fr;grid-template-rows: calc(100vh - 130px)"
+      >
+        <div class="ag-theme-balham my-2 grow flex flex-col">
+          <ag-grid-angular
+            style="flex-grow: 1;"
+            class="ag-theme-balham-dark"
+            [pagination]="true"
+            [rowData]="filteredAnimals"
+            [columnDefs]="colDefs"
+          >
+          </ag-grid-angular>
+        </div>
+        <div class="flex flex-col overflow-y-auto" style="max-height: 100vh;">
+          <app-animal-form />
+          <app-breeding-pod-list />
+        </div>
       </div>
-      <app-animal-form />
-      <app-breeding-pod-list />
     </div>
   `,
   imports: [
@@ -257,13 +269,13 @@ export class MainViewComponent implements OnInit {
         onClick: (e: DnDMonster) => this.deleteAnimal(e.uuid),
       },
     },
-    { headerName: "Name", field: "name", filter: true },
+    { headerName: "Name", field: "name", filter: true, editable: true },
     { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
     {
       headerName: "Rating",
       field: "tier",
       maxWidth: 75,
-      filter: true,
+      filter: RankingFilter,
       comparator: this.rankingComparator.bind(this),
     },
     {
@@ -281,27 +293,27 @@ export class MainViewComponent implements OnInit {
     {
       headerName: "Gestation Period",
       field: "nerfed.gestationPeriod.enumValue",
-      filter: true,
+      filter: GestationPeriodFilter,
       comparator: this.trageZeitAttributeWerteComparator.bind(this),
     },
     {
       headerName: "Stärke",
       field: "nerfed.strength.enumValue",
       maxWidth: 125,
-      filter: true,
+      filter: StrengthAttributeWerteFilter,
     },
     {
       headerName: "Remarkability",
       field: "nerfed.remarkability.enumValue",
       maxWidth: 125,
-      filter: true,
+      filter: RemarkabilityFilter,
       comparator: this.remarkabilityComparator.bind(this),
     },
     {
       headerName: "Mutation Chance",
       field: "nerfed.mutationChance.enumValue",
       maxWidth: 130,
-      filter: true,
+      filter: MutationChanceFilter,
       comparator: this.mutationChanceComparator.bind(this),
     },
     {

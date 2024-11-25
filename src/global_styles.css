@@ -6,6 +6,8 @@
 
 /* Add application styles & imports to this file! */
 body {
+  max-height: 100vh;
+  overflow: hidden;
   .star-wars-theme {
     background-color: #000;
     color: #ffe81f;
