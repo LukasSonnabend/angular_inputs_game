@@ -7,7 +7,7 @@ import {
   YieldBonus,
 } from "../AttributeConfig";
 import { v4 as uuidv4 } from "uuid";
-import { randSuperheroName } from "@ngneat/falso";
+import { randFullName, randSuperheroName } from "@ngneat/falso";
 import MonsterData from "../resources/monsters.json";
 import {
   AttributeDataMapping,
@@ -144,9 +144,12 @@ export function evolutionStageNerfed(monster: DnDMonster): DnDMonster {
 function generateNewMonster(): DnDMonster {
   const species = getRandomElement(MonsterData);
   const birthTimestamp = new Date();
+  const gender = Gender[Math.floor(Math.random() * 2) as 0 | 1];
   const data = {
     uuid: uuidv4(),
-    name: randSuperheroName(),
+    name: randFullName({
+      gender: gender === Gender[0] ? "male" : "female",
+    }),
     // @ts-ignore
     evolutionStage: EvolutionStage[Math.floor(Math.random() * 3) as 0 | 1 | 2],
     lastEvolutionTimestamp: birthTimestamp,
@@ -167,7 +170,7 @@ function generateNewMonster(): DnDMonster {
     // @ts-ignore
     yieldBonus: YieldBonus.Spärlich,
     // @ts-ignore
-    gender: Gender[Math.floor(Math.random() * 2) as 0 | 1],
+    gender: gender,
   };
   // @ts-ignore
   return data;
@@ -185,7 +188,9 @@ export function generateNewMonsterW(
   // @ts-ignore
   const data = {
     uuid: uuidv4(),
-    name: randSuperheroName(),
+    name: randFullName({
+      gender: gender === Gender[0] ? "male" : "female",
+    }),
     // @ts-ignore
     evolutionStage: evolutionStageInc, //EvolutionStage[Math.floor(Math.random() * 3) as 0 | 1 | 2],
     lastEvolutionTimestamp: birthTimestamp,

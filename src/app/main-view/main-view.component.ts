@@ -34,6 +34,7 @@ import { RemarkabilityFilter } from "../filters/remarkability.filter";
 import { RankingFilter } from "../filters/ranking.filter";
 import { MutationChanceFilter } from "../filters/mutationchance.filter";
 import { GestationPeriodFilter } from "../filters/gestation-period.filter";
+import { SimpleTextEditor } from "../cells/monster-name.cells";
 
 @Component({
   standalone: true,
@@ -269,7 +270,17 @@ export class MainViewComponent implements OnInit {
         onClick: (e: DnDMonster) => this.deleteAnimal(e.uuid),
       },
     },
-    { headerName: "Name", field: "name", filter: true, editable: true },
+    {
+      headerName: "Name",
+      field: "name",
+      filter: true,
+      editable: true,
+      cellEditor: SimpleTextEditor,
+      cellEditorParams: {
+        renameFunction: (uuid: string, name: string) =>
+          this.animalService.renameAnimal(uuid, name),
+      },
+    },
     { headerName: "Gender", field: "gender", maxWidth: 100, filter: true },
     {
       headerName: "Rating",

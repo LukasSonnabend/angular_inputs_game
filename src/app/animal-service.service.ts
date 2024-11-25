@@ -204,6 +204,16 @@ export class AnimalService {
     return this.indexedDBService.getAnimal(uuid);
   }
 
+  renameAnimal(uuid: string, name: string) {
+    // find animal in animals$
+    const animals = this.animalsSubject.getValue();
+    const animal = animals.find((a) => a.uuid === uuid);
+    if (animal) {
+      animal.name = name;
+      this.updateAnimal(animal);
+    }
+  }
+
   deleteAnimal(uuid: string) {
     this.deletingAnimals.push(uuid);
 

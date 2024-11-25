@@ -3,10 +3,11 @@ import { FormsModule } from "@angular/forms";
 import { IFilterAngularComp } from "ag-grid-angular";
 import monsters from "../resources/monsters.json";
 import { IDoesFilterPassParams, IFilterParams } from "ag-grid-community";
+import { CommonModule } from "@angular/common";
 
 @Component({
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   template: `
     <div class="year-filter">
       <div>Species</div>
