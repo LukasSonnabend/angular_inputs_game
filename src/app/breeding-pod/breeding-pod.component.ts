@@ -9,7 +9,7 @@ import {
 import { BreedingServiceService } from "../breeding-service.service";
 import { CommonModule } from "@angular/common";
 import { Direction, RoundPipe } from "../round.pipe";
-import { BreedingPod, Gender } from "../../types";
+import { BreedingPod, DnDMonster, Gender } from "../../types";
 import { MS_TO_DAYS } from "../../util";
 
 @Component({
@@ -22,6 +22,10 @@ import { MS_TO_DAYS } from "../../util";
 export class BreedingPodComponent {
   @Input() pod!: BreedingPod;
   protected Direction = Direction;
+  getGenderName(parent: DnDMonster): string {
+    // @ts-ignore
+    return parent.gender === "MALE" ? "Father" : "Mother";
+  }
 
   constructor(protected breedService: BreedingServiceService) {}
 
