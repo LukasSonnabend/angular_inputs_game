@@ -68,7 +68,7 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
   selector: "app-root",
   standalone: true,
   template: `
-    <div class="star-wars-theme h-screen flex flex-col">
+    <div class="star-wars-theme h-screen flex flex-col overflow-y-scroll">
       <div class="grid" style="grid-template-columns: 3fr 1fr">
         <app-minimal-animal-form class="flex-grow"></app-minimal-animal-form>
         <div class="flex items-end flex-col justify-end">
