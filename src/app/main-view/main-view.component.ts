@@ -319,6 +319,7 @@ export class MainViewComponent implements OnInit {
       field: "nerfed.strength.enumValue",
       maxWidth: 125,
       filter: StrengthAttributeWerteFilter,
+      comparator: this.strengthAttributeWerteComparator.bind(this),
     },
     {
       headerName: "Remarkability",
