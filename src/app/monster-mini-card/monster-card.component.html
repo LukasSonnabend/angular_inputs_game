@@ -1,0 +1,35 @@
+<div
+  (click)="onMonsterClick()"
+  [class.selected]="selectionService.isSelected(monster)"
+  class="monster-card flex flex-col gap-2"
+>
+  <div class="flex-grow">
+    <div class="flex">
+      <img
+        [src]="monster?.species?.image_url"
+        alt="{{ monster?.name }}"
+        class="monster-image"
+      />
+      <h2>{{ monster?.name }}</h2>
+    </div>
+    <ng-container *ngIf="monster">
+      <app-evolution-stepper [monster]="monster" />
+    </ng-container>
+  </div>
+  <ag-grid-angular
+    class="ag-theme-balham-dark h-[65px]"
+    [rowData]="[monster]"
+    [columnDefs]="colDefs"
+  >
+  </ag-grid-angular>
+
+  <div *ngIf="showDataView" class="data-view">
+    <pre>{{ monster | json }}</pre>
+  </div>
+</div>
+<div>
+  <div>Birth moment {{ monster?.birthTimestamp | date : "medium" }}</div>
+  <button class="button button-danger" (click)="releaseMonster($event)">
+    Release
+  </button>
+</div>

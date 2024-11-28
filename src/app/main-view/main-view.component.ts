@@ -35,6 +35,7 @@ import { RankingFilter } from "../filters/ranking.filter";
 import { MutationChanceFilter } from "../filters/mutationchance.filter";
 import { GestationPeriodFilter } from "../filters/gestation-period.filter";
 import { SimpleTextEditor } from "../cells/monster-name.cells";
+import { AnimalMinimalFormComponent } from "../animal-minimal-form/animal-form.component";
 
 @Component({
   standalone: true,
@@ -68,22 +69,29 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
   standalone: true,
   template: `
     <div class="star-wars-theme h-screen flex flex-col">
-      <span>Total Value: {{ totalValue }}</span>
-      <div class="flex justify-end">
-        <div class="flex gap-10">
-          <button class="button button-primary" (click)="saveToSupabase()">
-            save
-          </button>
-          <button class="button button-secondary" (click)="loadFromSupabase()">
-            load
-          </button>
+      <div class="grid" style="grid-template-columns: 3fr 1fr">
+        <app-minimal-animal-form class="flex-grow"></app-minimal-animal-form>
+        <div class="flex items-end flex-col justify-end">
+          <h1>Ruk´s Animal Hoe</h1>
+          <span>Total Value: {{ totalValue }}</span>
+          <div class="flex gap-10">
+            <button class="button button-primary" (click)="saveToSupabase()">
+              save
+            </button>
+            <button
+              class="button button-secondary"
+              (click)="loadFromSupabase()"
+            >
+              load
+            </button>
+          </div>
         </div>
       </div>
       <div
         class="grid"
         style="grid-template-columns: 3fr 1fr;grid-template-rows: calc(100vh - 130px)"
       >
-        <div class="ag-theme-balham my-2 grow flex flex-col">
+        <div class="ag-theme-balham grow flex flex-col">
           <ag-grid-angular
             style="flex-grow: 1;"
             class="ag-theme-balham-dark"
@@ -94,19 +102,18 @@ export class CustomButtonComponent implements ICellRendererAngularComp {
           </ag-grid-angular>
         </div>
         <div class="flex flex-col overflow-y-auto" style="max-height: 100vh;">
-          <app-animal-form />
           <app-breeding-pod-list />
         </div>
       </div>
     </div>
   `,
   imports: [
-    AnimalFormComponent,
     CommonModule,
     BreedingPodListComponent,
     FormsModule,
     ReactiveFormsModule,
     AgGridAngular,
+    AnimalMinimalFormComponent,
   ],
 })
 export class MainViewComponent implements OnInit {

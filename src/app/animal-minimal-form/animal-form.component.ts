@@ -28,13 +28,13 @@ import generateNewMonster from "../helpers/generateNewMonster";
 import { maturityValidator } from "../validators/MaturityValidator";
 
 @Component({
-  selector: "app-animal-form",
+  selector: "app-minimal-animal-form",
   standalone: true,
   templateUrl: "./animal-form.component.html",
   styleUrls: ["./animal-form.component.css"],
   imports: [ReactiveFormsModule, AttributeInputComponent, CommonModule],
 })
-export class AnimalFormComponent implements OnInit {
+export class AnimalMinimalFormComponent implements OnInit {
   saveToIndexedDB(_t7: {
     name: string;
     control: import("@angular/forms").AbstractControl<any, any>;
@@ -107,6 +107,11 @@ export class AnimalFormComponent implements OnInit {
     speciesMismatch: "These species are not compatible.",
     evolutionStageMismatch: "Both animals must be adults.",
   };
+
+  getErrorText(errorKey: string) {
+    //@ts-ignore
+    return this.formErrors[errorKey];
+  }
 
   getFormErrorKeys() {
     return Object.keys(this.form.errors || {});

@@ -1,15 +1,18 @@
 <form [formGroup]="formRef">
-    <input style="visibility: hidden" type="text" [formControlName]="controlKey">
-  </form>
-  <!-- Display the value of the input field outside of the input -->
-  <!-- <p>Born on {{formRef.controls[controlKey]?.value?.birthTimestamp | date: 'medium'}}</p> Use async pipe to subscribe to mountTime -->
-  <ng-template #elseBlock>No value</ng-template>
-  <!-- Displaying the parent form's value -->
-  <!-- This line might not be necessary if you're displaying individual control values -->
+  <input
+    style="visibility: hidden"
+    type="text"
+    [formControlName]="controlKey"
+  />
+</form>
+<!-- Display the value of the input field outside of the input -->
+<!-- <p>Born on {{formRef.controls[controlKey]?.value?.birthTimestamp | date: 'medium'}}</p> Use async pipe to subscribe to mountTime -->
+<ng-template #elseBlock>No value</ng-template>
+<!-- Displaying the parent form's value -->
+<!-- This line might not be necessary if you're displaying individual control values -->
 <!-- <p *ngIf="parentForm?.value">Stringified Value: {{ formRef.controls[controlKey].value | json }}</p> -->
 
-  <!-- <p *ngIf="controlKey">Control Key: {{ controlKey }}</p> -->
+<!-- <p *ngIf="controlKey">Control Key: {{ controlKey }}</p> -->
 <div class="mt-2">
-  <app-monster-card [monster]="formRef.controls[controlKey].value"></app-monster-card>
-
+  <app-monster-mini-card [monster]="formRef.controls[controlKey].value" />
 </div>

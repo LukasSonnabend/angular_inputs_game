@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- <button class="button button-secondary" (click)="addRandomAnimal($event)">Add monster</button> -->
+  <div class="flex justify-between">
+    <div *ngFor="let error of form.errors | keyvalue" style="display: flex">
+      <div *ngIf="form.errors?.[error.key]" class="error-message">
+        <h2>{{ getErrorText(error.key) }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!form.invalid && formControlsArray.length === 2">
+    <button
+      type="submit"
+      class="button button-primary"
+      style="display: block"
+      [disabled]="!form.valid"
+    >
+      Submit
+    </button>
+  </div>
+
+  <ng-container *ngIf="formControlsArray.length > 0">
+    <div>
+      <app-attribute-input
+        [controlKey]="formControlsArray[0].name"
+        [formRef]="form"
+      ></app-attribute-input>
+      <!-- <button class="button button-warning" (click)="reroll(key)">Reroll monster</button> -->
+      <!-- <button class="button button-secondary" (click)="saveToIndexedDB(key)">Save to IndexedDB</button> -->
+    </div>
+  </ng-container>
+</form>

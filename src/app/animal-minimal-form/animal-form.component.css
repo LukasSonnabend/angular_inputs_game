@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap');
+
+
+.error-message {
+  flex-grow: 1;
+  font-family: 'Pathway Gothic One', sans-serif;
+  color: #FFE81F; /* Gold color similar to Star Wars logo */
+  background-color: #000; /* Space-like dark background */
+  border: 1px solid #FFE81F; /* Gold border */
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-100%);
+  animation: slideIn 0.5s forwards;
+}
+
+.error-message h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #ff441f;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
