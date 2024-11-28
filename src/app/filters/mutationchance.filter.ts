@@ -4,14 +4,17 @@ import { IFilterAngularComp } from "ag-grid-angular";
 import { IDoesFilterPassParams, IFilterParams } from "ag-grid-community";
 import { Remarkability, StrengthAttributeWerte } from "../../types";
 import { CommonModule } from "@angular/common";
-import { MutationChance } from "../AttributeConfig";
+import {
+  MutationChance,
+  MutationChanceAttributeValues,
+} from "../AttributeConfig";
 
 @Component({
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
     <div class="filter-container">
-      <div>Strength Attribute</div>
+      <div>MutationChance Attribute</div>
       <select
         [(ngModel)]="filterValue"
         (ngModelChange)="updateFilter()"
@@ -19,7 +22,7 @@ import { MutationChance } from "../AttributeConfig";
       >
         <option value="">All</option>
         <option *ngFor="let option of options" [value]="option">
-          {{ option }}
+          {{ option }} ({{ valueMapping[option].bonus }})
         </option>
       </select>
     </div>
@@ -29,6 +32,7 @@ export class MutationChanceFilter implements IFilterAngularComp {
   params!: IFilterParams;
   filterValue = "";
   options = Object.values(MutationChance);
+  valueMapping = MutationChanceAttributeValues;
 
   agInit(params: IFilterParams): void {
     this.params = params;

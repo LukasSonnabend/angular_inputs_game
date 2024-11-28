@@ -4,6 +4,7 @@ import { IFilterAngularComp } from "ag-grid-angular";
 import { IDoesFilterPassParams, IFilterParams } from "ag-grid-community";
 import { StrengthAttributeWerte } from "../../types";
 import { CommonModule } from "@angular/common";
+import { StrengthAttributeValues } from "../AttributeConfig";
 
 @Component({
   standalone: true,
@@ -18,7 +19,7 @@ import { CommonModule } from "@angular/common";
       >
         <option value="">All</option>
         <option *ngFor="let option of options" [value]="option">
-          {{ option }}
+          {{ option }} ({{ valueMapping[option].bonus }})
         </option>
       </select>
     </div>
@@ -28,7 +29,7 @@ export class StrengthAttributeWerteFilter implements IFilterAngularComp {
   params!: IFilterParams;
   filterValue = "";
   options = Object.values(StrengthAttributeWerte);
-
+  valueMapping = StrengthAttributeValues;
   agInit(params: IFilterParams): void {
     this.params = params;
   }

@@ -4,14 +4,18 @@ import { IFilterAngularComp } from "ag-grid-angular";
 import { IDoesFilterPassParams, IFilterParams } from "ag-grid-community";
 import { Remarkability, StrengthAttributeWerte } from "../../types";
 import { CommonModule } from "@angular/common";
-import { MutationChance, TrageZeitAttributeWerte } from "../AttributeConfig";
+import {
+  MutationChance,
+  TrageZeitAttributeValue,
+  TrageZeitAttributeWerte,
+} from "../AttributeConfig";
 
 @Component({
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
     <div class="filter-container">
-      <div>Strength Attribute</div>
+      <div>GestationPeriod Attribute</div>
       <select
         [(ngModel)]="filterValue"
         (ngModelChange)="updateFilter()"
@@ -19,7 +23,7 @@ import { MutationChance, TrageZeitAttributeWerte } from "../AttributeConfig";
       >
         <option value="">All</option>
         <option *ngFor="let option of options" [value]="option">
-          {{ option }}
+          {{ option }} ({{ valueMapping[option].bonus }})
         </option>
       </select>
     </div>
@@ -29,7 +33,7 @@ export class GestationPeriodFilter implements IFilterAngularComp {
   params!: IFilterParams;
   filterValue = "";
   options = Object.values(TrageZeitAttributeWerte);
-
+  valueMapping = TrageZeitAttributeValue;
   agInit(params: IFilterParams): void {
     this.params = params;
   }

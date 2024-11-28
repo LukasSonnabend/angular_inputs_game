@@ -4,13 +4,14 @@ import { IFilterAngularComp } from "ag-grid-angular";
 import { IDoesFilterPassParams, IFilterParams } from "ag-grid-community";
 import { Remarkability, StrengthAttributeWerte } from "../../types";
 import { CommonModule } from "@angular/common";
+import { RemarkabilityAttributeValues } from "../AttributeConfig";
 
 @Component({
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
     <div class="filter-container">
-      <div>Strength Attribute</div>
+      <div>Remarkability Attribute</div>
       <select
         [(ngModel)]="filterValue"
         (ngModelChange)="updateFilter()"
@@ -18,7 +19,7 @@ import { CommonModule } from "@angular/common";
       >
         <option value="">All</option>
         <option *ngFor="let option of options" [value]="option">
-          {{ option }}
+          {{ option }} ({{ valueMapping[option].bonus }})
         </option>
       </select>
     </div>
@@ -28,6 +29,7 @@ export class RemarkabilityFilter implements IFilterAngularComp {
   params!: IFilterParams;
   filterValue = "";
   options = Object.values(Remarkability);
+  valueMapping = RemarkabilityAttributeValues;
 
   agInit(params: IFilterParams): void {
     this.params = params;
